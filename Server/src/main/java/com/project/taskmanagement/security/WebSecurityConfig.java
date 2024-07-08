@@ -1,12 +1,14 @@
 package com.project.taskmanagement.security;
 
 
+import com.project.taskmanagement.Entities.Role;
 import com.project.taskmanagement.security.jwt.AuthEntryPointJwt;
 import com.project.taskmanagement.security.jwt.AuthTokenFilter;
 import com.project.taskmanagement.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -66,7 +68,7 @@ public class WebSecurityConfig {
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers("/api/auth/**").permitAll()
 						.requestMatchers("/api/test/**").permitAll()
-						// .requestMatchers(HttpMethod.POST, "/client/save").hasAnyAuthority(String.valueOf(Role.ROLE_ADMIN))
+						//.requestMatchers(HttpMethod.POST, "/admin/**").hasAnyAuthority(String.valueOf(Role.ROLE_ADMIN))
 						.requestMatchers("/client/**").permitAll()
 						.anyRequest().authenticated()
 				);
