@@ -1,15 +1,12 @@
 package com.project.taskmanagement.Controllers;
 
-import com.project.taskmanagement.Services.AuthService;
+import com.project.taskmanagement.Services.Auth.AuthService;
 import com.project.taskmanagement.payload.request.LoginRequest;
 import com.project.taskmanagement.payload.request.SignupRequest;
 import com.project.taskmanagement.payload.request.TokenRefreshRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController

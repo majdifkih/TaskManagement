@@ -1,4 +1,4 @@
-package com.project.taskmanagement.Services;
+package com.project.taskmanagement.Services.Auth;
 
 import com.project.taskmanagement.payload.request.LoginRequest;
 import com.project.taskmanagement.payload.request.SignupRequest;

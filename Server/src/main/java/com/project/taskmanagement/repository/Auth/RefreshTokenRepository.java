@@ -1,4 +1,4 @@
-package com.project.taskmanagement.repository;
+package com.project.taskmanagement.repository.Auth;
 
 
 import com.project.taskmanagement.Entities.RefreshToken;

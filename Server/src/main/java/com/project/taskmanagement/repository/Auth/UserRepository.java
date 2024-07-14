@@ -1,4 +1,4 @@
-package com.project.taskmanagement.repository;
+package com.project.taskmanagement.repository.Auth;
 
 import com.project.taskmanagement.Entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;

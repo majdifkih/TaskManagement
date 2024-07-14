@@ -2,7 +2,7 @@ package com.project.taskmanagement.security.services;
 
 
 import com.project.taskmanagement.Entities.User;
-import com.project.taskmanagement.repository.UserRepository;
+import com.project.taskmanagement.repository.Auth.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

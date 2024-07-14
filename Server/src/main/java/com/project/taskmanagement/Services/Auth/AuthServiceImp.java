@@ -1,4 +1,4 @@
-package com.project.taskmanagement.Services;
+package com.project.taskmanagement.Services.Auth;
 
 import com.project.taskmanagement.Entities.RefreshToken;
 import com.project.taskmanagement.Entities.Role;
@@ -9,7 +9,7 @@ import com.project.taskmanagement.payload.request.TokenRefreshRequest;
 import com.project.taskmanagement.payload.response.JwtResponse;
 import com.project.taskmanagement.payload.response.MessageResponse;
 import com.project.taskmanagement.payload.response.TokenRefreshResponse;
-import com.project.taskmanagement.repository.UserRepository;
+import com.project.taskmanagement.repository.Auth.UserRepository;
 import com.project.taskmanagement.security.jwt.JwtUtils;
 import com.project.taskmanagement.security.services.RefreshTokenService;
 import com.project.taskmanagement.security.services.UserDetailsImpl;

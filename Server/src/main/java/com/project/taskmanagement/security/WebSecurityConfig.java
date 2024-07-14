@@ -68,7 +68,7 @@ public class WebSecurityConfig {
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers("/api/auth/**").permitAll()
 						.requestMatchers("/api/test/**").permitAll()
-						//.requestMatchers(HttpMethod.POST, "/admin/**").hasAnyAuthority(String.valueOf(Role.ROLE_ADMIN))
+						.requestMatchers("/admin/**").hasAnyAuthority(String.valueOf(Role.ROLE_ADMIN))
 						.requestMatchers("/client/**").permitAll()
 						.anyRequest().authenticated()
 				);
@@ -81,7 +81,7 @@ public class WebSecurityConfig {
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
-		corsConfiguration.setAllowedOrigins(List.of("*"));
+		corsConfiguration.setAllowedOrigins(List.of("http://localhost:4200"));
 		corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		corsConfiguration.setAllowCredentials(true);
 		corsConfiguration.setAllowedHeaders(List.of("*"));

@@ -2,8 +2,8 @@ package com.project.taskmanagement.security.services;
 
 
 import com.project.taskmanagement.Entities.RefreshToken;
-import com.project.taskmanagement.repository.RefreshTokenRepository;
-import com.project.taskmanagement.repository.UserRepository;
+import com.project.taskmanagement.repository.Auth.RefreshTokenRepository;
+import com.project.taskmanagement.repository.Auth.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
