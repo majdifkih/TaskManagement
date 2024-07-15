@@ -2,5 +2,9 @@
 @import '../node_modules/ngx-toastr/toastr.css';
 
 .toast-top-center {
-    margin-top: 90px !important; /* Ajustez la valeur selon vos besoins */
+    margin-top: 90px !important; 
   }
+  @tailwind base;
+@tailwind components;
+@tailwind utilities;
+

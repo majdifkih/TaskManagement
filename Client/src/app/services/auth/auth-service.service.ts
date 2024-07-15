@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient,HttpEvent,HttpHeaders, HttpRequest } from '@angular/common/http';
+import { HttpClient,HttpEvent,HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
@@ -52,10 +52,8 @@ export class AuthServiceService {
       });
   }
 
-  checkUserExistence(data:any): Observable<boolean> {
-    return this.http.post<boolean>(`${this.host}/userexisted`,data);
-  }
-
+  
+  
  
     
   

@@ -61,7 +61,7 @@
     cursor: pointer;
 }
 
-.container button.hidden{
+.container button.btnLog{
     background-color: transparent;
     border-color: #fff;
 }

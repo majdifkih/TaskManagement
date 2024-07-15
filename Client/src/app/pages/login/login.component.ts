@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthServiceService } from '../../services/auth-service.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { AuthServiceService } from '../../services/auth/auth-service.service';
 
 @Component({
   selector: 'app-login',
@@ -37,30 +37,25 @@ export class LoginComponent implements OnInit{
 
      onRegister() {
       if (this.signupForm.valid) {
-        this.authService.checkUserExistence(this.signupForm.value).subscribe({
-          next: (exists: boolean) => {
-            if (exists) {
-              this._toastr.warning("User already exists");
-            } else {
-              this.authService.signup(this.signupForm.value).subscribe({
-                next: (data: any) => {
-                  this._toastr.success('User registered successfully', 'Success');
-                  this.router.navigate(['/login']);
-                },
-                error: (error) => {
-                  console.error(error);
-                }
-              });
-            }
+        this.authService.signup(this.signupForm.value).subscribe({
+          next: (data: any) => {
+            this._toastr.success('User registered successfully', 'Success');
+            this.router.navigate(['/login']);
           },
           error: (error) => {
-            console.error(error);
+            if (error.status === 400) {
+              this._toastr.error('User already exists', 'Error');
+                console.error(error);
+            }
+              
+          
           }
         });
       } else {
         this._toastr.error("Please fill out all fields correctly.");
       }
     }
+    
   
   
 onLogin() {
