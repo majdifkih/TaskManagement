@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/projects")
 public class ProjectController {
 
     @Autowired
@@ -19,50 +19,33 @@ public class ProjectController {
 
     @GetMapping("/allproject")
     public ResponseEntity<List<Project>> getAllProjects() {
-        try {
-            return projectService.getAllProjects();
-        } catch (Exception e) {
 
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+            return projectService.getAllProjects();
+
     }
 
     @GetMapping("/projectdetail/{id}")
     public ResponseEntity<Project> getProjectDetail(@PathVariable Long id) {
-        try {
             return projectService.getProjectById(id);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+
     }
 
     @PostMapping("/addproject")
     public ResponseEntity<?> addProject(@RequestBody ProjectRequest projectRequest) {
-        try {
-            return projectService.addProject(projectRequest);
-        } catch (Exception e) {
 
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+            return projectService.addProject(projectRequest);
+
     }
 
     @PutMapping("/updateproject/{id}")
     public ResponseEntity<?> updateProject(@RequestBody ProjectRequest projectRequest, @PathVariable Long id) {
-        try {
-            return projectService.updateProject(projectRequest, id);
-        } catch (Exception e) {
 
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+            return projectService.updateProject(projectRequest, id);
     }
 
     @DeleteMapping("/delproject/{id}")
     public ResponseEntity<?> deleteProject(@PathVariable Long id) {
-        try {
             return projectService.deleteProject(id);
-        } catch (Exception e) {
 
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
     }
 }

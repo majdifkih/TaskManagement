@@ -5,19 +5,23 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @Entity
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String projectName;
+    private LocalDateTime creationDate;
 
     public Project() {
     }
 
-    public Project(String projectName) {
-        this.id = id;
+    public Project(String projectName, LocalDateTime creationDate) {
         this.projectName = projectName;
+        this.creationDate=creationDate;
     }
 
     public Long getId() {
@@ -34,5 +38,13 @@ public class Project {
 
     public void setProjectName(String projectName) {
         this.projectName = projectName;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        creationDate = creationDate;
     }
 }

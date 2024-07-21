@@ -1,2 +1,4 @@
-package com.project.taskmanagement.Entities;public class Backlog {
+package com.project.taskmanagement.Entities;
+
+public class Backlog {
 }
