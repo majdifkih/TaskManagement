@@ -1,0 +1,8 @@
+/* Styles pour l'overlay */
+#drawer-overlay {
+    display: none;
+}
+
+#drawer-overlay.show {
+    display: block;
+}

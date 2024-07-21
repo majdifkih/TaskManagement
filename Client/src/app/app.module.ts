@@ -4,14 +4,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideToastr } from 'ngx-toastr';
+import {  HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 import { SideBarComponent } from './Components/side-bar/side-bar.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from './Components/footer/footer.component';
 import { HeaderComponent } from './Components/header/header.component';
+import { ProjectsComponent } from './pages/projects/projects.component';
+import { TasksComponent } from './pages/Tasks/tasks/tasks.component';
+import { BacklogComponent } from './pages/Backlog/backlog/backlog.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,7 +23,10 @@ import { HeaderComponent } from './Components/header/header.component';
     SideBarComponent,
     DashboardComponent,
     FooterComponent,
-    HeaderComponent
+    HeaderComponent,
+    ProjectsComponent,
+    TasksComponent,
+    BacklogComponent
   ],
   imports: [
     BrowserModule,
@@ -28,11 +35,16 @@ import { HeaderComponent } from './Components/header/header.component';
     HttpClientModule,
     ReactiveFormsModule,
     CommonModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      closeButton: true,
+      timeOut: 2000,
+      positionClass: 'toast-top-center',
+      preventDuplicates: true,
+    })
   ],
-  providers: [provideAnimations(),
-    provideToastr(
-    { closeButton: true, timeOut: 2000, positionClass: 'toast-top-center', preventDuplicates: true }
-  )],
+  providers: [
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

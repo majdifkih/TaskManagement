@@ -1,16 +1,16 @@
-.dash-container {
+.task-container {
     display: flex;
     flex-direction: column;
     height: 100vh;
   }
   
-  .dash-comp {
+  .task-comp {
     display: flex;
     width: 100%;
     background-color: rgb(241, 246, 246);
   }
   
-  .dash-header-container {
+  .task-header-container {
     width: 90%;
     position: fixed;
     top: 0;
@@ -18,16 +18,16 @@
     z-index: 10; /* Ensure the header stays on top of other content */
   }
   
-  .dash-header {
+  .task-header {
     width: 100%;
   }
   
-  .dash-main-content {
+  .task-main-content {
     flex: 1;
     padding: 20px;
   }
   
-  .dash-footer {
+  .task-footer {
     width: 100%;
     bottom: 0;
     left: 0;

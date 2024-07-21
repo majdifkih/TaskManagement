@@ -63,7 +63,7 @@ onLogin() {
     console.log(this.signinForm.value);
     this.authService.login(this.signinForm.value).subscribe({
       next: (data: any) => {
-        this.router.navigate(['/']);
+        this.router.navigate(['/dash']);
         console.log(data);
       },
       error: (error) => {
