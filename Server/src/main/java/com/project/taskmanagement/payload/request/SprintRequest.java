@@ -1,18 +1,12 @@
-package com.project.taskmanagement.Entities;
+package com.project.taskmanagement.payload.request;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
-
+import com.project.taskmanagement.Entities.Task;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
-@Entity
-public class Sprint {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long sprintId;
+public class SprintRequest {
     private String sprintName;
     private String sprintDescription;
     private String status;
@@ -21,33 +15,7 @@ public class Sprint {
     private LocalDateTime creationDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
-    @ManyToOne
-    @JoinColumn(name = "backlog_id")
-    @JsonBackReference
-    private Backlog backlog;
-    @OneToMany(mappedBy = "sprint", cascade = CascadeType.ALL)
-    private List<Task> tasks;
-    public Sprint() {
-    }
-
-    public Sprint(String sprintName, String sprintDescription, String status, Integer priority, LocalDateTime creationDate, Date endDate,Backlog backlog) {
-
-        this.sprintName = sprintName;
-        this.sprintDescription = sprintDescription;
-        this.status = status;
-        this.priority = priority;
-        this.creationDate = creationDate;
-        this.endDate = endDate;
-        this.backlog = backlog;
-    }
-
-    public Long getSprintId() {
-        return sprintId;
-    }
-
-    public void setSprintId(Long sprintId) {
-        this.sprintId = sprintId;
-    }
+    private Long backlog;
 
     public String getSprintName() {
         return sprintName;
@@ -97,19 +65,13 @@ public class Sprint {
         this.endDate = endDate;
     }
 
-    public Backlog getBacklog() {
+    public Long getBacklog() {
         return backlog;
     }
 
-    public void setBacklog(Backlog backlog) {
+    public void setBacklog(Long backlog) {
         this.backlog = backlog;
     }
 
-    public List<Task> getTasks() {
-        return tasks;
-    }
 
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
 }

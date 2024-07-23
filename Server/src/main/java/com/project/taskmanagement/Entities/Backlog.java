@@ -1,5 +1,6 @@
 package com.project.taskmanagement.Entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.antlr.v4.runtime.misc.NotNull;
 
@@ -19,6 +20,7 @@ public class Backlog {
     private Project project;
 
     @OneToMany(mappedBy = "backlog", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Sprint> sprints;
 
     public Backlog() {
