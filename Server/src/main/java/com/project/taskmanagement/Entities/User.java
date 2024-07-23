@@ -2,6 +2,8 @@ package com.project.taskmanagement.Entities;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 public class User {
 	@Id
@@ -19,6 +21,8 @@ public class User {
 
 	@Enumerated(EnumType.STRING)
 	private Role role;
+	@ManyToMany(mappedBy = "users")
+	private Set<Task> tasks;
 
 	public User() {
 	}
@@ -68,5 +72,13 @@ public class User {
 
 	public void setRole(Role role) {
 		this.role = role;
+	}
+
+	public Set<Task> getTasks() {
+		return tasks;
+	}
+
+	public void setTasks(Set<Task> tasks) {
+		this.tasks = tasks;
 	}
 }
