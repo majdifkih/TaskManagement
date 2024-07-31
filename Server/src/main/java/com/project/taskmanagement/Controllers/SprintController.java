@@ -3,8 +3,12 @@ package com.project.taskmanagement.Controllers;
 import com.project.taskmanagement.Services.Sprint.SprintService;
 import com.project.taskmanagement.payload.request.SprintRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/user/sprints")
@@ -12,6 +16,13 @@ public class SprintController {
 
     @Autowired
     private SprintService sprintService;
+    @GetMapping("/search")
+    public ResponseEntity<?> searchSprints(
+            @RequestParam(required = false) String sprintName,
+            @RequestParam(required = false) LocalDate endDate,
+            @RequestParam(required = false) String status) {
+        return sprintService.searchSprints(sprintName, endDate, status);
+    }
 
     @PostMapping("/addsprint")
     public ResponseEntity<?> addSprint(@RequestBody SprintRequest sprintRequest) {
@@ -38,8 +49,8 @@ public class SprintController {
         return sprintService.getSprintById(id);
     }
 
-    @GetMapping("/Sprintbacklog/{backlogId}")
-    public ResponseEntity<?> getSprintsByBacklog(@PathVariable Long backlogId) {
-        return sprintService.getSprintsByBacklog(backlogId);
+    @GetMapping("/Sprintbacklog/{projectId}")
+    public ResponseEntity<?> getSprintsByBacklog(@PathVariable Long projectId) {
+        return sprintService.getSprintsByProject(projectId);
     }
 }

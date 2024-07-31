@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -18,27 +19,27 @@ public class Sprint {
     private String status;
     private Integer priority;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime creationDate;
+    private LocalDate startDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date endDate;
+    private LocalDate endDate;
     @ManyToOne
-    @JoinColumn(name = "backlog_id")
+    @JoinColumn(name = "project_id")
     @JsonBackReference
-    private Backlog backlog;
+    private Project project;
     @OneToMany(mappedBy = "sprint", cascade = CascadeType.ALL)
     private List<Task> tasks;
     public Sprint() {
     }
 
-    public Sprint(String sprintName, String sprintDescription, String status, Integer priority, LocalDateTime creationDate, Date endDate,Backlog backlog) {
+    public Sprint(String sprintName, String sprintDescription, String status, Integer priority, LocalDate startDate, LocalDate  endDate, Project project) {
 
         this.sprintName = sprintName;
         this.sprintDescription = sprintDescription;
         this.status = status;
         this.priority = priority;
-        this.creationDate = creationDate;
+        this.startDate = startDate;
         this.endDate = endDate;
-        this.backlog = backlog;
+        this.project = project;
     }
 
     public Long getSprintId() {
@@ -81,28 +82,28 @@ public class Sprint {
         this.priority = priority;
     }
 
-    public LocalDateTime getCreationDate() {
-        return creationDate;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate  getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate  endDate) {
         this.endDate = endDate;
     }
 
-    public Backlog getBacklog() {
-        return backlog;
+    public Project getProject() {
+        return project;
     }
 
-    public void setBacklog(Backlog backlog) {
-        this.backlog = backlog;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     public List<Task> getTasks() {

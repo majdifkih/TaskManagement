@@ -1,7 +1,10 @@
 package com.project.taskmanagement.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -9,19 +12,30 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long project_id;
+
     private String projectName;
+
     private LocalDateTime creationDate;
 
-    @OneToOne(mappedBy = "project")
+    private String description;
+
+    @OneToMany(mappedBy = "sprintId", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private Backlog backlog;
+    private List<Sprint> sprints;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
+    private User admin;
 
     public Project() {
     }
 
-    public Project(String projectName, LocalDateTime creationDate) {
+    public Project(String projectName, LocalDateTime creationDate, String description, User admin) {
         this.projectName = projectName;
         this.creationDate = creationDate;
+        this.description = description;
+        this.admin = admin;
     }
 
     public Long getId() {
@@ -48,11 +62,27 @@ public class Project {
         this.creationDate = creationDate;
     }
 
-    public Backlog getBacklog() {
-        return backlog;
+    public List<Sprint> getSprints() {
+        return sprints;
     }
 
-    public void setBacklog(Backlog backlog) {
-        this.backlog = backlog;
+    public void setSprints(List<Sprint> sprints) {
+        this.sprints = sprints;
+    }
+
+    public User getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(User admin) {
+        this.admin = admin;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

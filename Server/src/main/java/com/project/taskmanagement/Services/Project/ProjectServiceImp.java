@@ -1,9 +1,13 @@
 package com.project.taskmanagement.Services.Project;
 
 import com.project.taskmanagement.Entities.Project;
+import com.project.taskmanagement.Entities.User;
 import com.project.taskmanagement.payload.request.ProjectRequest;
 import com.project.taskmanagement.payload.response.MessageResponse;
+import com.project.taskmanagement.repository.Auth.UserRepository;
 import com.project.taskmanagement.repository.Project.ProjectRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,20 +20,36 @@ import java.util.Optional;
 
 @Service
 public class ProjectServiceImp implements ProjectService {
+    private static final Logger logger = LoggerFactory.getLogger(ProjectServiceImp.class);
     @Autowired
     ProjectRepository projectRepository;
+    @Autowired
+    UserRepository userRepository;
 
-    public ResponseEntity<?> addProject(@RequestBody ProjectRequest projectRequest) {
+
+    public ResponseEntity<?> addProject(ProjectRequest projectRequest) {
         try {
+            Long userId = projectRequest.getAdmin();
+            if (userId == null) {
+                return ResponseEntity.badRequest().body(new MessageResponse("User ID must not be null"));
+            }
+
+
+            Optional<User> existingUser = userRepository.findById(userId);
+            if (!existingUser.isPresent()) {
+                return ResponseEntity.badRequest().body(new MessageResponse("User not found"));
+            }
             LocalDateTime creationDate = LocalDateTime.now();
-            Project project = new Project(projectRequest.getProjectName(), creationDate);
+            Project project = new Project(projectRequest.getProjectName(), creationDate, projectRequest.getDescription(), existingUser.get());
             projectRepository.save(project);
+
             return ResponseEntity.ok(new MessageResponse("Project created successfully!"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new MessageResponse("An error occurred while creating the project: " + e.getMessage()));
         }
     }
+
 
     @Override
     public ResponseEntity<?> updateProject(ProjectRequest projectRequest, Long id) {
@@ -38,6 +58,7 @@ public class ProjectServiceImp implements ProjectService {
             if (p.isPresent()) {
                 Project project = p.get();
                 project.setProjectName(projectRequest.getProjectName());
+                project.setDescription(projectRequest.getDescription());
                 projectRepository.saveAndFlush(project);
                 return ResponseEntity.ok(new MessageResponse("Project updated successfully!"));
             } else {
@@ -87,4 +108,20 @@ public class ProjectServiceImp implements ProjectService {
                     .body(null);
         }
     }
+
+        @Override
+        public ResponseEntity<?> getProjectsByUser(Long userId) {
+            try {
+                Optional<User> user = userRepository.findById(userId);
+                if (user.isPresent()) {
+                    List<Project> projects = projectRepository.findByAdmin(user.get());
+                    return ResponseEntity.ok(projects);
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("User not found"));
+                }
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(new MessageResponse("An error occurred while retrieving the projects: " + e.getMessage()));
+            }
+        }
 }

@@ -27,7 +27,10 @@ public class ProjectController {
     @GetMapping("/projectdetail/{id}")
     public ResponseEntity<Project> getProjectDetail(@PathVariable Long id) {
             return projectService.getProjectById(id);
-
+    }
+    @GetMapping("/project/{userId}")
+    public ResponseEntity<?> getProjectByUser(@PathVariable Long userId) {
+        return projectService.getProjectsByUser(userId);
     }
 
     @PostMapping("/addproject")

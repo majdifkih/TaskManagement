@@ -1,7 +1,9 @@
 package com.project.taskmanagement.Entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -23,7 +25,9 @@ public class User {
 	private Role role;
 	@ManyToMany(mappedBy = "users")
 	private Set<Task> tasks;
-
+	@OneToMany(mappedBy = "project_id", cascade = CascadeType.ALL)
+	@JsonManagedReference
+	private List<Project> projects;
 	public User() {
 	}
 
@@ -80,5 +84,13 @@ public class User {
 
 	public void setTasks(Set<Task> tasks) {
 		this.tasks = tasks;
+	}
+
+	public List<Project> getProjects() {
+		return projects;
+	}
+
+	public void setProjects(List<Project> projects) {
+		this.projects = projects;
 	}
 }

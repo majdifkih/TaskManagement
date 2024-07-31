@@ -12,4 +12,5 @@ public interface ProjectService {
     public ResponseEntity<?> deleteProject(Long id);
     public ResponseEntity<List<Project>> getAllProjects();
     public ResponseEntity<Project> getProjectById(Long id);
+    public ResponseEntity<?> getProjectsByUser(Long userId);
 }

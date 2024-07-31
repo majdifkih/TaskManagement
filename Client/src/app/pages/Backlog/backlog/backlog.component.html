@@ -155,7 +155,15 @@
                   <p><strong>End Date:</strong> {{ sprint.endDate | date }}</p>
                   </div>
                 </div>
-                  <div class="flex gap-2 justify-end mt-2">
+                  <div class="flex gap-5 justify-end mt-2">
+                    <button routerLink="" class="flex items-center text-gray-500 dark:text-white hover:text-gray-600">
+                     
+                      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M9 7V2.221a2 2 0 0 0-.5.365L4.586 6.5a2 2 0 0 0-.365.5H9Zm2 0V2h7a2 2 0 0 1 2 2v9.293l-2-2a1 1 0 0 0-1.414 1.414l.293.293h-6.586a1 1 0 1 0 0 2h6.586l-.293.293A1 1 0 0 0 18 16.707l2-2V20a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9h5a2 2 0 0 0 2-2Z" clip-rule="evenodd"/>
+                      </svg>
+                      
+                      <span class="ml-2">Details</span>
+                    </button>
                     <button (click)="onModalEdit(sprint)" class="flex items-center text-green-500 dark:text-white hover:text-green-600">
                       <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                         <path fill-rule="evenodd" d="M11.32 6.176H5c-1.105 0-2 .949-2 2.118v10.588C3 20.052 3.895 21 5 21h11c1.105 0 2-.948 2-2.118v-7.75l-3.914 4.144A2.46 2.46 0 0 1 12.81 16l-2.681.568c-1.75.37-3.292-1.263-2.942-3.115l.536-2.839c.097-.512.335-.983.684-1.352l2.914-3.086Z" clip-rule="evenodd" />

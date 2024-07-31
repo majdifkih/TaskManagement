@@ -53,7 +53,7 @@ public class AuthServiceImp implements AuthService {
 
             String jwt = jwtUtils.generateJwtToken(userDetails);
             String role = userDetails.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
+                    .map(grantedAuthority -> grantedAuthority.getAuthority())
                     .findFirst()
                     .orElseThrow(() -> new RuntimeException("User has no roles assigned"));
 
@@ -65,6 +65,7 @@ public class AuthServiceImp implements AuthService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized: " + e.getMessage());
         }
     }
+
 
     @Override
     public ResponseEntity<?> registerUser(SignupRequest signUpRequest) {
@@ -98,7 +99,8 @@ public class AuthServiceImp implements AuthService {
                     .map(refreshToken -> {
                         refreshTokenService.verifyExpiration(refreshToken);
                         User user = refreshToken.getUser();
-                        String token = jwtUtils.generateTokenFromUsername(user.getUsername());
+                        String role = user.getRole().name();
+                        String token = jwtUtils.generateTokenFromUsername(user.getId(), user.getUsername(), user.getEmail(), role);
                         return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
                     })
                     .orElseThrow(() -> new RuntimeException("Refresh token is not valid or expired."));

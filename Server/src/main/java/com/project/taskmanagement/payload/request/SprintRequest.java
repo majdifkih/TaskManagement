@@ -2,6 +2,8 @@ package com.project.taskmanagement.payload.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.taskmanagement.Entities.Task;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -12,10 +14,10 @@ public class SprintRequest {
     private String status;
     private Integer priority;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime creationDate;
+    private LocalDate startDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date endDate;
-    private Long backlog;
+    private LocalDate endDate;
+    private Long project;
 
     public String getSprintName() {
         return sprintName;
@@ -49,28 +51,29 @@ public class SprintRequest {
         this.priority = priority;
     }
 
-    public LocalDateTime getCreationDate() {
-        return creationDate;
+
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate  getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate  endDate) {
         this.endDate = endDate;
     }
 
-    public Long getBacklog() {
-        return backlog;
+    public Long getProject() {
+        return project;
     }
 
-    public void setBacklog(Long backlog) {
-        this.backlog = backlog;
+    public void setProject(Long project) {
+        this.project = project;
     }
 
 
