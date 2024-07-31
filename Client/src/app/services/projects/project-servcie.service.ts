@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { AuthServiceService } from '../auth/auth-service.service';
 
 
@@ -36,11 +36,19 @@ export class ProjectService {
 
 
 
-  getAllProjects(): Observable<any[]> {
+  // getAllProjects(): Observable<any[]> {
+  //   let headers = this.httpOptions.headers;
+  //   headers = this.addAuthorizationHeader(headers);
+
+  //   return this.http.get<any[]>(`${this.host}/allproject`, { headers }).pipe(
+  //     tap(_ => console.log("Projects retrieved successfully"))
+  //   );
+  // }
+  AllProjectsByUser(id: number): Observable<any[]> {
     let headers = this.httpOptions.headers;
     headers = this.addAuthorizationHeader(headers);
 
-    return this.http.get<any[]>(`${this.host}/allproject`, { headers }).pipe(
+    return this.http.get<any[]>(`${this.host}/project/${id}`, { headers }).pipe(
       tap(_ => console.log("Projects retrieved successfully"))
     );
   }
@@ -79,4 +87,5 @@ export class ProjectService {
     return this.http.delete<any>(`${this.host}/delproject/${id}`, { headers }).pipe(
       tap(_ => console.log("Project deleted successfully"))
     );
-  }}
+  }
+}

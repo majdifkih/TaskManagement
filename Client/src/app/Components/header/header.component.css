@@ -1,0 +1,67 @@
+/* Ajoutez ce CSS pour ajuster la position et le style des notifications */
+.fixed {
+    position: fixed;
+    top:80px; /* Ajustez selon la position désirée */
+    right: 16px;
+  }
+  
+  .w-80 {
+    width: 15rem;
+  }
+  
+  .bg-opacity-90 {
+    background-color: rgba(202, 205, 208, 0.9); /* bg-gray-800 avec 90% d'opacité */
+  }
+  
+  
+  
+  .rounded-lg {
+    border-radius: 0.5rem;
+  }
+  
+  .shadow-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+  
+  .text-white {
+    color: #fff;
+  }
+  
+  
+  
+  .font-semibold {
+    font-weight: 600;
+  }
+  
+  
+  
+  .bg-white {
+    background-color: #fff;
+  }
+  
+  .text-gray-800 {
+    color: #1f2937;
+  }
+  
+  .text-xs {
+    font-size: 0.875rem;
+  }
+  
+  .text-indigo-600 {
+    color: #4f46e5;
+  }
+  
+  .font-semibold {
+    font-weight: 600;
+  }
+  
+  .text-gray-500 {
+    color: #6b7280;
+  }
+  
+  .text-xs {
+    font-size: 0.75rem;
+  }
+  
+  
+  

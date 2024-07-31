@@ -1,35 +1,103 @@
-.task-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
-  
-  .task-comp {
-    display: flex;
-    width: 100%;
-    background-color: rgb(241, 246, 246);
-  }
-  
-  .task-header-container {
-    width: 90%;
-    position: fixed;
-    top: 0;
-    right: 0;
-    z-index: 10; /* Ensure the header stays on top of other content */
-  }
-  
-  .task-header {
-    width: 100%;
-  }
-  
-  .task-main-content {
-    flex: 1;
-    padding: 20px;
-  }
-  
-  .task-footer {
-    width: 100%;
-    bottom: 0;
-    left: 0;
-  }
-  
+.backlog-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.backlog-comp {
+  display: flex;
+  width: 100%;
+  background-color: rgb(241, 246, 246);
+}
+
+.backlog-header {
+  width: 90%;
+  top: 0;
+  right: 0;
+  z-index: 10;
+}
+.main-content {
+  flex: 1;
+  overflow-x: hidden; 
+}
+
+
+.backlog-main-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-top: 2%;
+}
+
+
+
+/* ===== Career ===== */
+.career-form {
+  border-radius: 5px;
+  padding: 0 10px;
+  height: 2%;
+}
+
+.career-form .form-control {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 0;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #3a3939;
+}
+.career-form .form-control-date {
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 0;
+  padding: 5px 10px;
+  color: #908888;
+  text-align: center;
+  width: 180%;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+}
+input[type="date"] {
+  cursor: pointer; /* Changer le curseur pour indiquer qu'on peut cliquer */
+}
+.career-form .form-control::-webkit-input-placeholder {
+
+  color: #908888;
+}
+
+.career-form .custom-select {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 0;
+  padding: 5px 10px;
+  color: #908888;;
+  width: 100%;
+  border-radius: 5px;
+  text-align: left;
+  height: auto;
+  background-image: none;
+}
+
+.career-form .custom-select:focus {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.career-form .select-container {
+  position: relative;
+}
+.main-content {
+  padding: 1rem;
+}
+
+
+
+
+
+.rotate-180 {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
+.accordion-content {
+  transition: max-height 0.3s ease;
+}

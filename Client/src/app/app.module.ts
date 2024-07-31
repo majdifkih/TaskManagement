@@ -15,6 +15,12 @@ import { HeaderComponent } from './Components/header/header.component';
 import { ProjectsComponent } from './pages/projects/projects.component';
 import { TasksComponent } from './pages/Tasks/tasks/tasks.component';
 import { BacklogComponent } from './pages/Backlog/backlog/backlog.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { provideNativeDateAdapter, MatNativeDateModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -41,9 +47,16 @@ import { BacklogComponent } from './pages/Backlog/backlog/backlog.component';
       timeOut: 2000,
       positionClass: 'toast-top-center',
       preventDuplicates: true,
-    })
+    }),
+    DragDropModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatNativeDateModule,
+    MatIconModule
   ],
   providers: [
+    provideNativeDateAdapter()
   ],
   bootstrap: [AppComponent]
 })
