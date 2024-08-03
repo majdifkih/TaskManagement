@@ -44,6 +44,7 @@ export class ProjectService {
   //     tap(_ => console.log("Projects retrieved successfully"))
   //   );
   // }
+  
   AllProjectsByUser(id: number): Observable<any[]> {
     let headers = this.httpOptions.headers;
     headers = this.addAuthorizationHeader(headers);

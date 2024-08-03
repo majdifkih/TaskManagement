@@ -13,7 +13,6 @@ import { CommonModule } from '@angular/common';
 import { FooterComponent } from './Components/footer/footer.component';
 import { HeaderComponent } from './Components/header/header.component';
 import { ProjectsComponent } from './pages/projects/projects.component';
-import { TasksComponent } from './pages/Tasks/tasks/tasks.component';
 import { BacklogComponent } from './pages/Backlog/backlog/backlog.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -21,6 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { provideNativeDateAdapter, MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
+import { TasksComponent } from './pages/Tasks/tasks.component';
 
 @NgModule({
   declarations: [

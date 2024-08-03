@@ -56,14 +56,14 @@ export class BacklogComponent implements OnInit {
       sprintDescription: ['', [Validators.required]],
       startDate: ['', [Validators.required]],
       endDate: ['', [Validators.required]],
-      project: [this.projectId],
+      projectId: [this.projectId],
     });
     this.editSprintForm = this.fb.group({
-      sprintName: ['', [Validators.required]],
-      sprintDescription: ['', [Validators.required]],
-      startDate: ['', [Validators.required]],
-      endDate: ['', [Validators.required]]
-    });
+      sprintName: [''],
+      sprintDescription: [''],
+      startDate: [''],
+      endDate: ['']
+    });    
   }
   
   

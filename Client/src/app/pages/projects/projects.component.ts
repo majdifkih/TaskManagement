@@ -15,7 +15,6 @@ export class ProjectsComponent implements OnInit {
   projectToEdit: any = null;
   addProjectForm!: FormGroup;
   currentProjectId: number = 0;
-  dropdowns: { [key: number]: boolean } = {};
   delId: number = 0;
   showAlert = false;
 
@@ -42,6 +41,7 @@ export class ProjectsComponent implements OnInit {
       next: (response: any) => {
         console.log(response);
         this.projects = response;
+       
       },
       error: (error) => {
         console.error('Error fetching projects:', error);
@@ -77,35 +77,37 @@ export class ProjectsComponent implements OnInit {
   
   addProject() {
     if (this.addProjectForm.valid) {
-      const userId = this.getUserId();
+        const userId = this.getUserId();
   
-      if (userId !== null && userId > 0) {
-     
-        this.addProjectForm.patchValue({ admin: userId });
-        console.log("Form values before sending:", this.addProjectForm.value);
+        if (userId !== null && userId > 0) {
+            this.addProjectForm.patchValue({ admin: userId });
+            console.log("Form values before sending:", this.addProjectForm.value);
 
-        this.projectService.addProject(this.addProjectForm.value).subscribe({
-          next: (data: any) => {
-            this._toastr.success('Project added successfully', 'Success');
-            this.getAllProjects(); 
-            this.closeModal();
-          },
-          error: (error) => {
-            console.error('Error adding project:', error);
-            this._toastr.error('Error adding project', 'Error');
-          }
-        });
-      } else {
-        
-        console.error('Invalid user ID retrieved from local storage');
-        this._toastr.error('Cannot add project without valid user ID', 'Error');
-      }
+            this.projectService.addProject(this.addProjectForm.value).subscribe({
+                next: (data: any) => {
+                    this._toastr.success('Project added successfully', 'Success');
+                    this.getAllProjects(); 
+                    this.closeModal();
+                },
+                error: (error) => {
+                    
+                    if (error.status === 400) {
+                        this._toastr.error('The project name already exists, please choose another one.', 'Duplicate Project Name');
+                    } else {
+                        this._toastr.error('Error adding project', 'Error');
+                    }
+                }
+            });
+        } else {
+            console.error('Invalid user ID retrieved from local storage');
+            this._toastr.error('Cannot add project without valid user ID', 'Error');
+        }
     } else {
-   
-      console.error('Project form is invalid');
-      this._toastr.error('Please fill out all required fields', 'Error');
+        console.error('Project form is invalid');
+        this._toastr.error('Please fill out all required fields', 'Error');
     }
-  }
+}
+
   
 
   updateProject(id: number) {
@@ -116,9 +118,12 @@ export class ProjectsComponent implements OnInit {
           this.getAllProjects();
           this.closeModal();
         },
-        error: (error) => {
-          console.error('Error updating project:', error);
-          this._toastr.error('Error updating project', 'Error');
+        error: (error) => { 
+          if (error.status === 400)  {
+          this._toastr.error('The project name already exists, please choose another one.', 'Duplicate Project Name');
+      } else {
+          this._toastr.error('Error adding project', 'Error');
+      }
         }
       });
     }
@@ -127,6 +132,7 @@ export class ProjectsComponent implements OnInit {
   onSubmit() {
     if (this.isEditMode) {
       this.updateProject(this.currentProjectId);
+
     } else {
       this.addProject();
     }
@@ -145,19 +151,10 @@ export class ProjectsComponent implements OnInit {
       }
     });
   }
+  
 
-  toggleDropdown(event: Event, id: number): void {
-    event.stopPropagation();
-    this.dropdowns[id] = !this.dropdowns[id];
-  }
 
-  closeDropdowns(event: Event): void {
-    for (const key in this.dropdowns) {
-      if (this.dropdowns.hasOwnProperty(key)) {
-        this.dropdowns[key] = false;
-      }
-    }
-  }
+  
 
   onAddProject() {
     this.isEditMode = false;
@@ -165,10 +162,11 @@ export class ProjectsComponent implements OnInit {
     this.showModal = true;
   }
 
-  onEditProject(project: any) {
+  onEditProject(projects: any) {
+    console.log(projects);
     this.isEditMode = true;
-    this.currentProjectId = project.id;
-    this.addProjectForm.patchValue(project);
+    this.currentProjectId = projects.projectId;
+    this.addProjectForm.patchValue(projects);
     this.showModal = true;
   }
 
