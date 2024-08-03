@@ -25,7 +25,7 @@ public class User {
 	private Role role;
 	@ManyToMany(mappedBy = "users")
 	private Set<Task> tasks;
-	@OneToMany(mappedBy = "project_id", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "projectId", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<Project> projects;
 	public User() {

@@ -1,7 +1,9 @@
 package com.project.taskmanagement.Entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -16,10 +18,12 @@ public class Task {
     private String taskDescription;
     private String status;
     private Integer priority;
-    private LocalDateTime creationDate;
-    private Date endDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate startDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate endDate;
     @ManyToOne
-    @JoinColumn(name = "sprint_id")
+    @JoinColumn(name = "sprintId")
     private Sprint sprint;
     @ManyToMany
     @JoinTable(
@@ -32,12 +36,12 @@ public class Task {
     public Task() {
     }
 
-    public Task(String taskName, String taskDescription, String status, Integer priority, LocalDateTime creationDate, Date endDate) {
+    public Task(String taskName, String taskDescription, String status, Integer priority, LocalDate startDate, LocalDate endDate) {
         this.taskName = taskName;
         this.taskDescription = taskDescription;
         this.status = status;
         this.priority = priority;
-        this.creationDate = creationDate;
+        this.startDate = startDate;
         this.endDate = endDate;
     }
 
@@ -81,19 +85,19 @@ public class Task {
         this.priority = priority;
     }
 
-    public LocalDateTime getCreationDate() {
-        return creationDate;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 

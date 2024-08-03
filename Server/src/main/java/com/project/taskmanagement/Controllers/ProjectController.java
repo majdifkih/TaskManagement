@@ -1,10 +1,9 @@
 package com.project.taskmanagement.Controllers;
 
-import com.project.taskmanagement.Entities.Project;
 import com.project.taskmanagement.Services.Project.ProjectService;
-import com.project.taskmanagement.payload.request.ProjectRequest;
+import com.project.taskmanagement.payload.request.ProjectDto;
+import com.project.taskmanagement.payload.response.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,36 +17,35 @@ public class ProjectController {
     private ProjectService projectService;
 
     @GetMapping("/allproject")
-    public ResponseEntity<List<Project>> getAllProjects() {
+    public ResponseEntity<List<ProjectDto>> getAllProjects() {
 
             return projectService.getAllProjects();
-
     }
 
     @GetMapping("/projectdetail/{id}")
-    public ResponseEntity<Project> getProjectDetail(@PathVariable Long id) {
+    public ResponseEntity<ProjectDto> getProjectDetail(@PathVariable Long id) {
             return projectService.getProjectById(id);
     }
     @GetMapping("/project/{userId}")
-    public ResponseEntity<?> getProjectByUser(@PathVariable Long userId) {
+    public ResponseEntity<List<ProjectDto>> getProjectByUser(@PathVariable Long userId) {
         return projectService.getProjectsByUser(userId);
     }
 
     @PostMapping("/addproject")
-    public ResponseEntity<?> addProject(@RequestBody ProjectRequest projectRequest) {
+    public ResponseEntity<MessageResponse> addProject(@RequestBody ProjectDto projectDto) {
 
-            return projectService.addProject(projectRequest);
+            return projectService.addProject(projectDto);
 
     }
 
     @PutMapping("/updateproject/{id}")
-    public ResponseEntity<?> updateProject(@RequestBody ProjectRequest projectRequest, @PathVariable Long id) {
+    public ResponseEntity<MessageResponse> updateProject(@RequestBody ProjectDto projectDto, @PathVariable Long id) {
 
-            return projectService.updateProject(projectRequest, id);
+            return projectService.updateProject(projectDto, id);
     }
 
     @DeleteMapping("/delproject/{id}")
-    public ResponseEntity<?> deleteProject(@PathVariable Long id) {
+    public ResponseEntity<MessageResponse> deleteProject(@PathVariable Long id) {
             return projectService.deleteProject(id);
 
     }

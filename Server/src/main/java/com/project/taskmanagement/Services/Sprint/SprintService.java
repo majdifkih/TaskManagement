@@ -1,20 +1,19 @@
 package com.project.taskmanagement.Services.Sprint;
 
-import com.project.taskmanagement.Entities.Sprint;
-import com.project.taskmanagement.payload.request.SprintRequest;
+import com.project.taskmanagement.payload.request.SprintDto;
+import com.project.taskmanagement.payload.response.MessageResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 public interface SprintService {
-    ResponseEntity<?> addSprint(SprintRequest sprintRequest);
-    ResponseEntity<?> updateSprint(Long sprintId, SprintRequest sprintRequest);
-    ResponseEntity<?> deleteSprint(Long sprintId);
-    ResponseEntity<?> getAllSprints();
-    ResponseEntity<?> getSprintById(Long sprintId);
-    ResponseEntity<?> getSprintsByProject(Long projectId);
-    ResponseEntity<?> searchSprints(String sprintName, LocalDate endDate, String status);
+    ResponseEntity<MessageResponse> addSprint(SprintDto sprintDto);
+    ResponseEntity<MessageResponse> updateSprint(Long sprintId, SprintDto sprintDto);
+    ResponseEntity<MessageResponse> deleteSprint(Long sprintId);
+    ResponseEntity<List<SprintDto>> getAllSprints();
+    ResponseEntity<SprintDto> getSprintById(Long sprintId);
+    ResponseEntity<List<SprintDto>> getSprintsByProject(Long projectId);
+    ResponseEntity<List<SprintDto>> searchSprints(String sprintName, LocalDate endDate, String status);
 }
 

@@ -23,7 +23,7 @@ public class Sprint {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
     @ManyToOne
-    @JoinColumn(name = "project_id")
+    @JoinColumn(name = "projectId")
     @JsonBackReference
     private Project project;
     @OneToMany(mappedBy = "sprint", cascade = CascadeType.ALL)
@@ -31,8 +31,8 @@ public class Sprint {
     public Sprint() {
     }
 
-    public Sprint(String sprintName, String sprintDescription, String status, Integer priority, LocalDate startDate, LocalDate  endDate, Project project) {
-
+    public Sprint(Long sprintId,String sprintName, String sprintDescription, String status, Integer priority, LocalDate startDate, LocalDate  endDate, Project project) {
+        this.sprintId=sprintId;
         this.sprintName = sprintName;
         this.sprintDescription = sprintDescription;
         this.status = status;

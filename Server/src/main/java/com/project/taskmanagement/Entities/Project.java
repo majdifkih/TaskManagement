@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long project_id;
+    private Long projectId;
 
     private String projectName;
 
@@ -31,19 +31,20 @@ public class Project {
     public Project() {
     }
 
-    public Project(String projectName, LocalDateTime creationDate, String description, User admin) {
+    public Project(Long projectId,String projectName, LocalDateTime creationDate, String description, User admin) {
+        this.projectId=projectId;
         this.projectName = projectName;
         this.creationDate = creationDate;
         this.description = description;
         this.admin = admin;
     }
 
-    public Long getId() {
-        return project_id;
+    public Long getProjectId() {
+        return projectId;
     }
 
-    public void setId(Long id) {
-        this.project_id = id;
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
     }
 
     public String getProjectName() {

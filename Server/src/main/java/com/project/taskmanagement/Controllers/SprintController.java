@@ -1,14 +1,14 @@
 package com.project.taskmanagement.Controllers;
 
 import com.project.taskmanagement.Services.Sprint.SprintService;
-import com.project.taskmanagement.payload.request.SprintRequest;
+import com.project.taskmanagement.payload.request.SprintDto;
+import com.project.taskmanagement.payload.response.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user/sprints")
@@ -17,7 +17,7 @@ public class SprintController {
     @Autowired
     private SprintService sprintService;
     @GetMapping("/search")
-    public ResponseEntity<?> searchSprints(
+    public ResponseEntity<List<SprintDto>> searchSprints(
             @RequestParam(required = false) String sprintName,
             @RequestParam(required = false) LocalDate endDate,
             @RequestParam(required = false) String status) {
@@ -25,32 +25,32 @@ public class SprintController {
     }
 
     @PostMapping("/addsprint")
-    public ResponseEntity<?> addSprint(@RequestBody SprintRequest sprintRequest) {
-        return sprintService.addSprint(sprintRequest);
+    public ResponseEntity<MessageResponse> addSprint(@RequestBody SprintDto sprintDto) {
+        return sprintService.addSprint(sprintDto);
     }
 
     @PutMapping("/updatesprint/{id}")
-    public ResponseEntity<?> updateSprint(@PathVariable Long id, @RequestBody SprintRequest sprintRequest) {
-        return sprintService.updateSprint(id, sprintRequest);
+    public ResponseEntity<MessageResponse> updateSprint(@PathVariable Long id, @RequestBody SprintDto sprintDto) {
+        return sprintService.updateSprint(id, sprintDto);
     }
 
     @DeleteMapping("/delsprint/{id}")
-    public ResponseEntity<?> deleteSprint(@PathVariable Long id) {
+    public ResponseEntity<MessageResponse> deleteSprint(@PathVariable Long id) {
         return sprintService.deleteSprint(id);
     }
 
     @GetMapping("/allsprint")
-    public ResponseEntity<?> getAllSprints() {
+    public ResponseEntity<List<SprintDto>> getAllSprints() {
         return sprintService.getAllSprints();
     }
 
     @GetMapping("/sprint/{id}")
-    public ResponseEntity<?> getSprintById(@PathVariable Long id) {
+    public ResponseEntity<SprintDto> getSprintById(@PathVariable Long id) {
         return sprintService.getSprintById(id);
     }
 
     @GetMapping("/Sprintbacklog/{projectId}")
-    public ResponseEntity<?> getSprintsByBacklog(@PathVariable Long projectId) {
+    public ResponseEntity<List<SprintDto>> getSprintsByProject(@PathVariable Long projectId) {
         return sprintService.getSprintsByProject(projectId);
     }
 }
