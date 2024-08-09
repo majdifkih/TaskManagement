@@ -1,93 +1,114 @@
 .task-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
-  
-  .task-comp {
-    display: flex;
-    width: 100%;
-    background-color: rgb(241, 246, 246);
-  }
-  
-  .task-header-container {
-    width: 90%;
-    position: fixed;
-    top: 0;
-    right: 0;
-    z-index: 10; /* Ensure the header stays on top of other content */
-  }
-  
-  .task-header {
-    width: 100%;
-  }
-  
-  .task-main-content {
-    display: flex;
-    margin-top: 10%;
-    gap: 20px;
-    padding: 20px;
-  }
-  
-  .task-footer {
-    width: 100%;
-    bottom: 0;
-    left: 0;
-  }
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
 
-  .example-container {
-    width: 400px;
-    max-width: 100%;
-    margin: 0 25px 25px 0;
-    display: inline-block;
-    vertical-align: top;
-  }
-  
-  .example-list {
-    border: solid 1px #ccc;
-    min-height: 60px;
-    background: white;
-    border-radius: 4px;
-    overflow: hidden;
-    display: block;
-  }
-  
-  .example-box {
-    padding: 20px 10px;
-    border-bottom: solid 1px #ccc;
-    color: rgba(0, 0, 0, 0.87);
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    box-sizing: border-box;
-    cursor: move;
-    background: white;
-    font-size: 14px;
-  }
-  
-  .cdk-drag-preview {
-    box-sizing: border-box;
-    border-radius: 4px;
-    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-                0 8px 10px 1px rgba(0, 0, 0, 0.14),
-                0 3px 14px 2px rgba(0, 0, 0, 0.12);
-  }
-  
-  .cdk-drag-placeholder {
-    opacity: 0;
-  }
-  
-  .cdk-drag-animating {
-    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-  }
-  
-  .example-box:last-child {
-    border: none;
-  }
-  
-  .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
-    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-  }
-  
-  
+.task-comp {
+  display: flex;
+  width: 100%;
+  background-color: rgb(241, 246, 246);
+}
+
+.task-header {
+  width: 90%;
+  top: 0;
+  right: 0;
+  z-index: 10;
+}
+.main-content {
+  flex: 1;
+  overflow-x: hidden; 
+}
+
+
+.task-main-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-top: 2%;
+}
+
+
+
+/* ===== Career ===== */
+.career-form {
+  border-radius: 5px;
+  padding: 0 10px;
+  height: 2%;
+}
+
+.career-form .form-control {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 0;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #3a3939;
+}
+.career-form .form-control-date {
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 0;
+  padding: 5px 10px;
+  color: #908888;
+  text-align: center;
+  width: 180%;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+}
+input[type="date"] {
+  cursor: pointer; /* Changer le curseur pour indiquer qu'on peut cliquer */
+}
+.career-form .form-control::-webkit-input-placeholder {
+
+  color: #908888;
+}
+
+.career-form .custom-select {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 0;
+  padding: 5px 10px;
+  color: #908888;;
+  width: 100%;
+  border-radius: 5px;
+  text-align: left;
+  height: auto;
+  background-image: none;
+}
+
+.career-form .custom-select:focus {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.career-form .select-container {
+  position: relative;
+}
+.main-content {
+  padding: 1rem;
+}
+
+
+.example-box {
+  transition: transform 0.01s ease, background-color 0.3s ease;
+}
+
+.example-list.cdk-drop-list-dragging .example-box {
+  transform: scale(1.05);
+  background-color: #f0f8ff; /* Couleur d'arrière-plan pour l'animation */
+}
+
+
+.rotate-180 {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
+.accordion-content {
+  transition: max-height 0.3s ease;
+}
+
+.commentbtn{
+  margin-top: 10%;
+}

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { AuthServiceService } from '../../services/auth/auth-service.service';
+import { AuthService } from '../../services/auth/auth-service.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit{
   signupForm!: FormGroup;
   signinForm!: FormGroup;
 
-  constructor(private authService:AuthServiceService,private router:Router,private fb: FormBuilder,private _toastr: ToastrService){}
+  constructor(private authService:AuthService,private router:Router,private fb: FormBuilder,private _toastr: ToastrService){}
 
   ngOnInit(): void {
     this.signupForm = this.fb.group({

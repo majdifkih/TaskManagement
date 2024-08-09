@@ -1,0 +1,98 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { AuthService } from '../auth/auth-service.service';
+import { Observable, tap } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class TaskService {
+  
+  private host = "http://localhost:8082/user/tasks";
+  private httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json'
+    })
+  };
+  private addAuthorizationHeader(headers: HttpHeaders): HttpHeaders {
+    const token = this.authService.getAccessToken(); 
+    if (token) {
+      return headers.set('Authorization', `Bearer ${token}`);
+    }
+    return headers;
+  }
+
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService ) { }
+    
+  AllTaskBySprint(id:number): Observable<any[]> {
+    let headers = this.httpOptions.headers;
+    headers = this.addAuthorizationHeader(headers);
+
+    return this.http.get<any[]>(`${this.host}/tasksprint/${id}`, { headers }).pipe(
+      tap(_ => console.log("Tasks retrieved successfully"))
+    );
+  }
+
+  getTaskDetail(id: number): Observable<any> {
+    let headers = this.httpOptions.headers;
+    headers = this.addAuthorizationHeader(headers);
+
+    return this.http.get<any>(`${this.host}/task/${id}`, { headers }).pipe(
+      tap(_ => console.log("Task detail retrieved successfully"))
+    );
+  }
+
+  addTask(taskData: any): Observable<any> {
+    let headers = this.httpOptions.headers;
+    headers = this.addAuthorizationHeader(headers);
+
+    return this.http.post<any>(`${this.host}/addtask`, taskData, { headers }).pipe(
+      tap(_ => console.log('Task added successfully'))
+    );
+  }
+
+  updateTask(taskData: any,id: number): Observable<any> {
+    let headers = this.httpOptions.headers;
+    headers = this.addAuthorizationHeader(headers);
+
+    return this.http.put<any>(`${this.host}/updatetask/${id}`, taskData, { headers }).pipe(
+      tap(_ => console.log("Task updated successfully"))
+    );
+  }
+
+  deleteTask(id: number): Observable<any> {
+    let headers = this.httpOptions.headers;
+    headers = this.addAuthorizationHeader(headers);
+
+    return this.http.delete<any>(`${this.host}/deltask/${id}`, { headers }).pipe(
+      tap(_ => console.log("Task deleted successfully"))
+    );
+  }
+
+  assignUsersToTask(taskId: number,userTaskData:any): Observable<any> {
+    let headers = this.httpOptions.headers;
+    headers = this.addAuthorizationHeader(headers);
+
+    return this.http.post<any>(`${this.host}/addusertask/${taskId}`, userTaskData, { headers }).pipe(
+      tap(_ => console.log('User assigned to task successfully'))
+    );
+  }
+  
+  unassignUserFromTask(taskId: number,userId:number): Observable<any> {
+    let headers = this.httpOptions.headers;
+    headers = this.addAuthorizationHeader(headers);
+
+    return this.http.delete<any>(`${this.host}/unassignuser/${taskId}/${userId}`, { headers }).pipe(
+      tap(_ => console.log('User unassigned from task successfully'))
+    );
+  }
+
+  updatestatus(taskData: any,id: number): Observable<any> {
+    let headers = this.httpOptions.headers;
+    headers = this.addAuthorizationHeader(headers);
+
+    return this.http.put<any>(`${this.host}/updatestatus/${id}`, taskData, { headers });
+}
+}

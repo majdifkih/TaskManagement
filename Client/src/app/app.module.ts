@@ -21,6 +21,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { provideNativeDateAdapter, MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { TasksComponent } from './pages/Tasks/tasks.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,9 @@ import { TasksComponent } from './pages/Tasks/tasks.component';
     MatInputModule,
     MatFormFieldModule,
     MatNativeDateModule,
-    MatIconModule
+    MatIconModule,
+    MatTooltipModule,
+    MatButtonModule
   ],
   providers: [
     provideNativeDateAdapter()

@@ -19,10 +19,10 @@ import { ToastrService } from 'ngx-toastr';
 export class BacklogComponent implements OnInit {
 
   showModal: boolean = false;
-  isOpen:boolean = false;
   openIndex: number | null = null;
   ProjectDescription: string = '';
   Sprints: any[] = [];
+  SprintsOrder : any[] = [];
   projectId: number = 0;
   addSprintForm!: FormGroup;
   editSprintForm!: FormGroup;
@@ -64,6 +64,7 @@ export class BacklogComponent implements OnInit {
       startDate: [''],
       endDate: ['']
     });    
+    console.log('Sprints:', this.Sprints);
   }
   
   
@@ -85,11 +86,15 @@ export class BacklogComponent implements OnInit {
       next: (response: any) => {
         this.Sprints=response;
         console.log(response);
+        this.sortSprintsByPriority();
       },
       error: (error) => {
         console.error('Error fetching sprints:', error);
       }
     });
+  }
+  sortSprintsByPriority() {
+    this.Sprints.sort((a, b) => a.priority - b.priority);
   }
  
   
@@ -159,17 +164,45 @@ export class BacklogComponent implements OnInit {
 
 
   drop(event: CdkDragDrop<any[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex,
-      );
+    const movedSprint = event.item.data;
+  
+    if (!movedSprint) {
+      console.error('Sprint item data is undefined');
+      return;
     }
+  
+    const previousIndex = this.Sprints.findIndex(sprint => sprint === movedSprint);
+  
+    if (previousIndex === -1) {
+      console.error('Sprint item data is not found in Sprints');
+      return;
+    }
+  
+    const currentIndex = event.currentIndex;
+
+  // Réorganiser les sprints
+  this.Sprints.splice(previousIndex, 1);
+  this.Sprints.splice(currentIndex, 0, movedSprint);
+
+  // Créer le tableau d'ordre des sprints
+  const SprintOrder = this.Sprints.map((sprint, index) => ({
+    sprintId: sprint.sprintId,
+    priority: index+1
+  }));
+  console.log('Sprint Order:', SprintOrder);
+    console.log('Updated Sprints:', this.Sprints);
+  
+    // Mettre à jour l'ordre des sprints dans le backend si nécessaire
+    this.sprintService.updateSprintOrder(SprintOrder).subscribe({
+      next: (response) => 
+
+        console.log('Order updated successful:', response),
+      error: (error) => console.error('Update error:', error)
+    });
   }
+  
+  
+
 
   evenPredicate(item: CdkDrag<number>) {
     return item.data % 2 === 0;
@@ -239,7 +272,7 @@ export class BacklogComponent implements OnInit {
 
   search(): void {
     const { sprintName, endDate, status } = this.searchCriteria;
-    this.sprintService.searchSprints(sprintName, endDate, status).subscribe({
+    this.sprintService.searchSprints(this.projectId,sprintName, endDate, status).subscribe({
       next: (data: any[]) => {
         this.Sprints = data;
         this.noResult = data.length === 0;

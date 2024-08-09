@@ -99,7 +99,9 @@
             class="example-list col" 
             (cdkDropListDropped)="drop($event)" 
             [cdkDropListEnterPredicate]="noReturnPredicate">
-            <div *ngFor="let sprint of Sprints; let i = index" cdkDrag>
+            <div *ngFor="let sprint of Sprints; let i = index" cdkDrag [cdkDragData]="sprint">
+
+
               <div id="accordion-collapse-{{i}}" data-accordion="collapse">
                 <h2 id="accordion-collapse-heading-{{i}}">
                   <button (click)="toggleAccordion(i)" type="button" class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-700 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3" aria-expanded="true" aria-controls="accordion-collapse-body-1">
@@ -255,7 +257,7 @@
         </svg>
       </div>
       <h2 class="mt-2 font-semibold text-gray-800">Confirm Delete</h2>
-      <p class="mt-2 text-sm text-gray-600 leading-relaxed">Are you sure you want to delete this project?</p>
+      <p class="mt-2 text-sm text-gray-600 leading-relaxed">Are you sure you want to delete this sprint?</p>
     </div>
 
     <div class="flex items-center mt-3">

@@ -6,7 +6,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthServiceService {
+export class AuthService {
   private host: string = "http://localhost:8082/api/auth";
   httpOptions = {
     headers: new HttpHeaders({
@@ -27,7 +27,7 @@ export class AuthServiceService {
         }),
         catchError(error => {
           console.error('Erreur lors de la connexion:', error);
-          return throwError(error);
+          return throwError(() =>error);
         })
       );
   }
@@ -36,8 +36,25 @@ export class AuthServiceService {
     return this.http.post(`${this.host}/signup`, data, this.httpOptions);
   }
 
+
+  private addAuthorizationHeader(headers: HttpHeaders): HttpHeaders {
+    const token = this.getAccessToken(); 
+  
+    if (token) {
+      return headers.set('Authorization', `Bearer ${token}`);
+    }
+    return headers;
+  }
+  
+
   logout(): Observable<any> {
-    return this.http.post(`${this.host}/logout`, {}, this.httpOptions)
+    let headers = this.httpOptions.headers;
+    headers = this.addAuthorizationHeader(headers);
+    const options = {
+      headers: headers
+    };
+  
+    return this.http.post(`${this.host}/signout`, {}, options)
       .pipe(
         map((response: any) => {
           if (response) {
@@ -47,7 +64,7 @@ export class AuthServiceService {
         }),
         catchError(error => {
           console.error('Erreur lors de la déconnexion:', error);
-          return throwError(error);
+          return throwError(() =>error);
         })
       );
   }
@@ -61,7 +78,7 @@ export class AuthServiceService {
       }),
       catchError(error => {
         console.error('Error during token refresh:', error);
-        this.clearTokens(); // Clear tokens on refresh error to stop the loop
+        this.clearTokens(); 
         return throwError(() => error);
       })
     );

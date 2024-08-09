@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthServiceService } from '../auth/auth-service.service';
+import { AuthService } from '../auth/auth-service.service';
 import { Observable, tap } from 'rxjs';
 
 @Injectable({
@@ -10,7 +10,7 @@ export class SprintService {
 
   constructor(
     private http: HttpClient,
-    private authService: AuthServiceService 
+    private authService: AuthService 
   ) { }
 
   private host = "http://localhost:8082/user/sprints";
@@ -48,7 +48,7 @@ export class SprintService {
     let headers = this.httpOptions.headers;
     headers = this.addAuthorizationHeader(headers);
 
-    return this.http.get<any[]>(`${this.host}/Sprintbacklog/${id}`, { headers }).pipe(
+    return this.http.get<any[]>(`${this.host}/sprintbacklog/${id}`, { headers }).pipe(
       tap(_ => console.log("Sprints retrieved successfully"))
     );
   }
@@ -88,21 +88,13 @@ export class SprintService {
       tap(_ => console.log("Sprint deleted successfully"))
     );
   }
-
-  getSprintByBacklog(id: number): Observable<any> {
-    let headers = this.httpOptions.headers;
-    headers = this.addAuthorizationHeader(headers);
-
-    return this.http.delete<any>(`${this.host}/Sprintbacklog/${id}`, { headers }).pipe(
-      tap(_ => console.log("Sprints retrieved successfully"))
-    );
-  }
-
-  searchSprints(sprintName?: string, endDate?: string, status?: string): Observable<any[]> {
+  searchSprints(projectId: number,sprintName?: string, endDate?: string, status?: string): Observable<any[]> {
     let params = new HttpParams();
     let headers = this.httpOptions.headers;
     headers = this.addAuthorizationHeader(headers);
-  
+    if (projectId) {
+      params = params.set('projectId', projectId);
+    }
     if (sprintName) {
       params = params.set('sprintName', sprintName);
     }
@@ -112,14 +104,19 @@ export class SprintService {
     if (status) {
       params = params.set('status', status);
     }
-    
-    // Combine params and headers into a single options object
+
     const options = {
       headers: headers,
       params: params
     };
     
     return this.http.get<any[]>(`${this.host}/search`, options);
+  }
+
+  updateSprintOrder(sprintData: any[]): Observable<void> {
+    let headers = this.httpOptions.headers;
+    headers = this.addAuthorizationHeader(headers);
+    return this.http.post<any>(`${this.host}/order`, sprintData, { headers });
   }
   
 }

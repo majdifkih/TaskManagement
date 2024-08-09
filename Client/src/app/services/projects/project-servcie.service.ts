@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { AuthServiceService } from '../auth/auth-service.service';
+import { AuthService } from '../auth/auth-service.service';
 
 
 @Injectable({
@@ -18,7 +18,7 @@ export class ProjectService {
 
   constructor(
     private http: HttpClient,
-    private authService: AuthServiceService 
+    private authService: AuthService 
   ) { }
 
   private addAuthorizationHeader(headers: HttpHeaders): HttpHeaders {

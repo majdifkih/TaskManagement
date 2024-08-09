@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
+import { AuthService } from '../../services/auth/auth-service.service';
 
 @Component({
   selector: 'app-side-bar',
@@ -9,7 +10,7 @@ import { Router, NavigationEnd } from '@angular/router';
 export class SideBarComponent implements OnInit {
   isDrawerOpen = false;
 
-  constructor(private router: Router) {
+  constructor(private router: Router,private authService:AuthService) {
     // Ecouter les événements de routage pour gérer l'état de la barre latérale
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -43,4 +44,17 @@ export class SideBarComponent implements OnInit {
       }
     }
   }
+  
+  logout(){
+    this.authService.logout().subscribe({
+      next: (response: any) => {
+        console.log(response);
+        this.router.navigate(['/login']);
+      },
+      error: (error) => {
+        console.error('Error logging out:', error);
+      }
+    });
+  }
+  
 }
