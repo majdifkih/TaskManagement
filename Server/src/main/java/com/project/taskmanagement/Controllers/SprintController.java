@@ -17,11 +17,11 @@ public class SprintController {
     @Autowired
     private SprintService sprintService;
     @GetMapping("/search")
-    public ResponseEntity<List<SprintDto>> searchSprints(
+    public ResponseEntity<List<SprintDto>> searchSprints(@RequestParam Long projectId,
             @RequestParam(required = false) String sprintName,
             @RequestParam(required = false) LocalDate endDate,
             @RequestParam(required = false) String status) {
-        return sprintService.searchSprints(sprintName, endDate, status);
+        return sprintService.searchSprints(projectId,sprintName, endDate, status);
     }
 
     @PostMapping("/addsprint")
@@ -49,8 +49,12 @@ public class SprintController {
         return sprintService.getSprintById(id);
     }
 
-    @GetMapping("/Sprintbacklog/{projectId}")
+    @GetMapping("/sprintbacklog/{projectId}")
     public ResponseEntity<List<SprintDto>> getSprintsByProject(@PathVariable Long projectId) {
         return sprintService.getSprintsByProject(projectId);
+    }
+    @PostMapping("/order")
+    public ResponseEntity<MessageResponse> updateSprintOrder(@RequestBody List<SprintDto> sprintsDto) {
+        return sprintService.updateSprintOrder(sprintsDto);
     }
 }

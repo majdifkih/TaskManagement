@@ -42,8 +42,7 @@ public class AuthServiceImp implements AuthService {
     @Autowired
     RefreshTokenService refreshTokenService;
     @Override
-    public ResponseEntity<?> authenticateUser(LoginRequest loginRequest) {
-        try {
+    public ResponseEntity<JwtResponse> authenticateUser(LoginRequest loginRequest) {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
@@ -61,15 +60,12 @@ public class AuthServiceImp implements AuthService {
 
             return ResponseEntity.ok(new JwtResponse(jwt, refreshToken.getToken(), userDetails.getId(),
                     userDetails.getUsername(), userDetails.getEmail(), role));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized: " + e.getMessage());
-        }
+
     }
 
 
     @Override
-    public ResponseEntity<?> registerUser(SignupRequest signUpRequest) {
-        try {
+    public ResponseEntity<MessageResponse> registerUser(SignupRequest signUpRequest) {
             if (userRepository.existsByUsername(signUpRequest.getUsername())) {
                 return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
             }
@@ -84,15 +80,10 @@ public class AuthServiceImp implements AuthService {
             userRepository.save(user);
 
             return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MessageResponse("An error occurred during registration: " + e.getMessage()));
-        }
     }
 
     @Override
-    public ResponseEntity<?> refreshtoken(TokenRefreshRequest request) {
-        try {
+    public ResponseEntity<TokenRefreshResponse> refreshtoken(TokenRefreshRequest request) {
             String requestRefreshToken = request.getRefreshToken();
 
             return refreshTokenService.findByToken(requestRefreshToken)
@@ -104,23 +95,15 @@ public class AuthServiceImp implements AuthService {
                         return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
                     })
                     .orElseThrow(() -> new RuntimeException("Refresh token is not valid or expired."));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MessageResponse("An error occurred during token refresh: " + e.getMessage()));
-        }
     }
 
     @Override
-    public ResponseEntity<?> logoutUser() {
-        try {
+    public ResponseEntity<MessageResponse> logoutUser() {
             UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             Long userId = userDetails.getId();
             refreshTokenService.deleteByUserId(userId);
             return ResponseEntity.ok(new MessageResponse("Log out successful!"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MessageResponse("An error occurred during logout: " + e.getMessage()));
-        }
+
     }
 
 }

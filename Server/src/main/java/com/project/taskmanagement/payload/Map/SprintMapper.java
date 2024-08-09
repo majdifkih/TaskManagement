@@ -1,8 +1,10 @@
 package com.project.taskmanagement.payload.Map;
 
 import com.project.taskmanagement.Entities.Sprint;
+import com.project.taskmanagement.Entities.Task;
 import com.project.taskmanagement.payload.request.SprintDto;
 
+import com.project.taskmanagement.payload.request.TaskDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -20,7 +22,9 @@ public interface SprintMapper {
 
     @Mapping(target = "sprintId", ignore = true)
     void updateEntityFromDto(SprintDto sprintDto, @MappingTarget Sprint sprint);
-
+    //@Mapping(target = "priority", ignore = true)
     List<SprintDto> toDtoList(List<Sprint> sprints);
+
+    List<Sprint> toEntityList(List<SprintDto> sprintDtos);
 }
 

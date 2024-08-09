@@ -31,15 +31,15 @@ public class ProjectServiceImp implements ProjectService {
 
     @Override
     public ResponseEntity<MessageResponse> addProject(ProjectDto projectDto) {
-        // Vérification si un projet avec le même nom existe déjà
-        if (projectRepository.existsByProjectName(projectDto.getProjectName())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("ProjectName already exists"));
-        }
 
-        // Récupérer l'utilisateur authentifié depuis le contexte de sécurité
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         Long userId = userDetails.getId();
+
+        String projectNameUpper = projectDto.getProjectName().toUpperCase();
+        if (projectRepository.existsByProjectNameAndAdminId(projectDto.getProjectName(), userId)) {
+            return ResponseEntity.badRequest().body(new MessageResponse("ProjectName already exists for this user"));
+        }
 
         Optional<User> existingUser = userRepository.findById(userId);
         if (!existingUser.isPresent()) {
@@ -49,6 +49,7 @@ public class ProjectServiceImp implements ProjectService {
         LocalDateTime creationDate = LocalDateTime.now();
         Project project = projectMapper.toEntity(projectDto);
         project.setCreationDate(creationDate);
+        project.setProjectName(projectNameUpper);
         project.setAdmin(existingUser.get());
         projectRepository.save(project);
 
@@ -57,21 +58,32 @@ public class ProjectServiceImp implements ProjectService {
 
     @Override
     public ResponseEntity<MessageResponse> updateProject(ProjectDto projectDto, Long id) {
-        // Vérification si un autre projet avec le même nom existe déjà
-        if (projectRepository.existsByProjectNameAndProjectIdNot(projectDto.getProjectName(), id)) {
-            return ResponseEntity.badRequest().body(new MessageResponse("ProjectName already exists"));
-        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Long userId = userDetails.getId();
 
-        Optional<Project> p = projectRepository.findById(id);
-        if (p.isPresent()) {
-            Project project = p.get();
-            project.setProjectName(projectDto.getProjectName());
-            project.setDescription(projectDto.getDescription());
-            projectRepository.saveAndFlush(project);
-            return ResponseEntity.ok(new MessageResponse("Project updated successfully!"));
-        } else {
+        Optional<Project> existingProject = projectRepository.findById(id);
+        if (!existingProject.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Project not found"));
         }
+
+        Project project = existingProject.get();
+
+        String projectNameUpper = projectDto.getProjectName() != null ? projectDto.getProjectName().toUpperCase() : null;
+
+        if (projectNameUpper != null && !project.getProjectName().equals(projectNameUpper)) {
+            if (projectRepository.existsByProjectNameAndAdminIdAndProjectId(projectNameUpper, userId, id)) {
+                return ResponseEntity.badRequest().body(new MessageResponse("ProjectName already exists for this user"));
+            }
+            project.setProjectName(projectNameUpper);
+        }
+
+        if (projectDto.getDescription() != null) {
+            project.setDescription(projectDto.getDescription());
+        }
+
+        projectRepository.saveAndFlush(project);
+        return ResponseEntity.ok(new MessageResponse("Project updated successfully!"));
     }
 
     @Override

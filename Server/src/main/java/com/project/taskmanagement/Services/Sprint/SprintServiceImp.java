@@ -13,9 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,12 +31,20 @@ public class SprintServiceImp implements SprintService {
 
     @Override
     public ResponseEntity<MessageResponse> addSprint(SprintDto sprintDto) {
+        if (sprintRepository.existsBySprintName(sprintDto.getSprintName())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("SprintName already exists"));
+        }
+        String validationMessage = validateSprintDates(sprintDto);
+        if (validationMessage != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse(validationMessage));
+        }
+
         Optional<Project> project = projectRepository.findById(sprintDto.getProjectId());
 
         if (project.isPresent()) {
             Sprint sprint = sprintMapper.toEntity(sprintDto);
             sprint.setProject(project.get());
-
+            sprint.setStatus("To-Do");
             sprintRepository.save(sprint);
             return ResponseEntity.ok(new MessageResponse("Sprint created successfully!"));
         } else {
@@ -49,6 +55,15 @@ public class SprintServiceImp implements SprintService {
 
     @Override
     public ResponseEntity<MessageResponse> updateSprint(Long sprintId, SprintDto sprintDto) {
+
+        if (sprintRepository.existsBySprintNameAndSprintId(sprintDto.getSprintName(), sprintId)) {
+            return ResponseEntity.badRequest().body(new MessageResponse("SprintName already exists"));
+        }
+
+        String validationMessage = validateSprintDates(sprintDto);
+        if (validationMessage != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse(validationMessage));
+        }
         Optional<Sprint> sprint = sprintRepository.findById(sprintId);
         if (sprint.isPresent()) {
             Sprint existingSprint = sprint.get();
@@ -60,6 +75,25 @@ public class SprintServiceImp implements SprintService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new MessageResponse("Sprint not found"));
         }
+    }
+    private String validateSprintDates(SprintDto sprintDto) {
+        LocalDate startDate = sprintDto.getStartDate();
+        LocalDate endDate = sprintDto.getEndDate();
+        LocalDate today = LocalDate.now();
+
+        if (startDate == null || endDate == null) {
+            return "Start date and end date must be provided.";
+        }
+
+        if (endDate.isBefore(startDate)) {
+            return "End date must be after start date.";
+        }
+
+        if (startDate.isBefore(today)) {
+            return "Start date must be today or in the future.";
+        }
+
+        return null;
     }
 
     @Override
@@ -106,8 +140,8 @@ public class SprintServiceImp implements SprintService {
     }
 
     @Override
-    public ResponseEntity<List<SprintDto>> searchSprints(String sprintName, LocalDate endDate, String status) {
-        List<Sprint> sprints = sprintRepository.searchSprints(sprintName, endDate, status);
+    public ResponseEntity<List<SprintDto>> searchSprints(Long projectId, String sprintName, LocalDate endDate, String status) {
+        List<Sprint> sprints = sprintRepository.searchSprints(projectId, sprintName, endDate, status);
         List<SprintDto> sprintDtos = sprintMapper.toDtoList(sprints);
 
         if (sprintDtos.isEmpty()) {
@@ -116,5 +150,23 @@ public class SprintServiceImp implements SprintService {
 
         return ResponseEntity.ok(sprintDtos);
     }
+    @Override
+    public ResponseEntity<MessageResponse> updateSprintOrder(List<SprintDto> sprintsDto) {
+        for (SprintDto sprintDto : sprintsDto) {
+            Optional<Sprint> existingSprintOpt = sprintRepository.findById(sprintDto.getSprintId());
+
+            if (existingSprintOpt.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new MessageResponse("Sprint with ID " + sprintDto.getSprintId() + " not found"));
+            }
+
+            Sprint existingSprint = existingSprintOpt.get();
+            existingSprint.setPriority(sprintDto.getPriority());
+            sprintRepository.save(existingSprint);
+        }
+
+        return ResponseEntity.ok(new MessageResponse("Sprint order updated successfully!"));
+    }
+
 }
 

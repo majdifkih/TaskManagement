@@ -1,15 +1,10 @@
 package com.project.taskmanagement.Services.Task;
 
-import com.project.taskmanagement.Entities.Project;
-import com.project.taskmanagement.Entities.Sprint;
 import com.project.taskmanagement.payload.request.TaskDto;
-import com.project.taskmanagement.payload.request.TaskRequest;
 import com.project.taskmanagement.payload.response.MessageResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface TaskService {
     ResponseEntity<MessageResponse> addTask(TaskDto taskDto);
@@ -18,4 +13,7 @@ public interface TaskService {
     ResponseEntity<List<TaskDto>> getAllTasks();
     ResponseEntity<TaskDto> getTaskById(Long taskId);
     ResponseEntity<List<TaskDto>> getTasksBySprint(Long sprintId);
+    ResponseEntity<MessageResponse> assignUsersToTask(Long taskId, List<Long> userIds);
+    ResponseEntity<MessageResponse> unassignUserFromTask(Long taskId, Long userId);
+    ResponseEntity<MessageResponse> updateStatusAndOrder(Long taskId, TaskDto taskDto);
 }

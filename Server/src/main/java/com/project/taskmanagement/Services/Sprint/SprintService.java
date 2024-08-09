@@ -14,6 +14,8 @@ public interface SprintService {
     ResponseEntity<List<SprintDto>> getAllSprints();
     ResponseEntity<SprintDto> getSprintById(Long sprintId);
     ResponseEntity<List<SprintDto>> getSprintsByProject(Long projectId);
-    ResponseEntity<List<SprintDto>> searchSprints(String sprintName, LocalDate endDate, String status);
+    ResponseEntity<List<SprintDto>> searchSprints(Long projectId,String sprintName, LocalDate endDate, String status);
+
+    ResponseEntity<MessageResponse> updateSprintOrder(List<SprintDto> sprintsDto);
 }
 

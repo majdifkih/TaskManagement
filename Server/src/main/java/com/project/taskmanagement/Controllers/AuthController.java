@@ -4,6 +4,9 @@ import com.project.taskmanagement.Services.Auth.AuthService;
 import com.project.taskmanagement.payload.request.LoginRequest;
 import com.project.taskmanagement.payload.request.SignupRequest;
 import com.project.taskmanagement.payload.request.TokenRefreshRequest;
+import com.project.taskmanagement.payload.response.JwtResponse;
+import com.project.taskmanagement.payload.response.MessageResponse;
+import com.project.taskmanagement.payload.response.TokenRefreshResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,24 +21,24 @@ public class AuthController {
   AuthService authService;
 
   @PostMapping("/signin")
-  public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+  public ResponseEntity<JwtResponse> authenticateUser(@RequestBody LoginRequest loginRequest) {
     return authService.authenticateUser(loginRequest);
   }
 
   @PostMapping("/signup")
-  public ResponseEntity<?> registerUser(@RequestBody SignupRequest signUpRequest) {
+  public ResponseEntity<MessageResponse> registerUser(@RequestBody SignupRequest signUpRequest) {
 
     return authService.registerUser(signUpRequest);
 
   }
 
   @PostMapping("/refreshtoken")
-  public ResponseEntity<?> refreshtoken(@RequestBody TokenRefreshRequest request) {
+  public ResponseEntity<TokenRefreshResponse> refreshtoken(@RequestBody TokenRefreshRequest request) {
     return authService.refreshtoken(request);
   }
 
   @PostMapping("/signout")
-  public ResponseEntity<?> logoutUser() {
+  public ResponseEntity<MessageResponse> logoutUser() {
     return authService.logoutUser();
   }
 }

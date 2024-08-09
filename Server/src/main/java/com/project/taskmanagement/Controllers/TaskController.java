@@ -1,7 +1,9 @@
 package com.project.taskmanagement.Controllers;
 
 import com.project.taskmanagement.Services.Task.TaskService;
+import com.project.taskmanagement.payload.request.SprintDto;
 import com.project.taskmanagement.payload.request.TaskDto;
+import com.project.taskmanagement.payload.request.UsersTaskDto;
 import com.project.taskmanagement.payload.response.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -44,5 +46,21 @@ public class TaskController {
     public ResponseEntity<List<TaskDto>> getTasksBySprint(@PathVariable Long sprintId) {
         return taskService.getTasksBySprint(sprintId);
     }
+    @PostMapping("/userstasks/{taskId}")
+    public ResponseEntity<MessageResponse> assignUsersToTask(
+            @PathVariable Long taskId,
+            @RequestBody UsersTaskDto usersTaskDto) {
 
+        return taskService.assignUsersToTask(taskId, usersTaskDto.getUserIds());
+    }
+    @DeleteMapping("/unassignuser/{taskId}/{userId}")
+    public ResponseEntity<MessageResponse> unassignUserFromTask(
+            @PathVariable Long taskId,
+            @PathVariable Long userId) {
+        return taskService.unassignUserFromTask(taskId, userId);
+    }
+    @PutMapping("/updatestatus/{id}")
+    public ResponseEntity<MessageResponse> updatestatus(@PathVariable Long id, @RequestBody TaskDto taskDto) {
+        return taskService.updateStatusAndOrder(id, taskDto);
+    }
 }

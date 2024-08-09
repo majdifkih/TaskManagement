@@ -12,6 +12,7 @@ public class TaskDto {
     private String taskDescription;
     private String status;
     private Integer priority;
+    private Integer taskOrder;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -56,6 +57,14 @@ public class TaskDto {
 
     public void setPriority(Integer priority) {
         this.priority = priority;
+    }
+
+    public Integer getTaskOrder() {
+        return taskOrder;
+    }
+
+    public void setTaskOrder(Integer taskOrder) {
+        this.taskOrder = taskOrder;
     }
 
     public LocalDate getStartDate() {

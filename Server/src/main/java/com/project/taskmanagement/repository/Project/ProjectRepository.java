@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> findByAdmin(User admin);
-    boolean existsByProjectName(String projectName);
-    boolean existsByProjectNameAndProjectIdNot(String projectName, Long projectId);
+    boolean existsByProjectNameAndAdminIdAndProjectId(String projectName, Long userId, Long id);
+   boolean existsByProjectNameAndAdminId(String projectName, Long userId);
 }

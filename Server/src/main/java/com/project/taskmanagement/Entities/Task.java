@@ -18,6 +18,7 @@ public class Task {
     private String taskDescription;
     private String status;
     private Integer priority;
+    private Integer taskOrder;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -36,11 +37,12 @@ public class Task {
     public Task() {
     }
 
-    public Task(String taskName, String taskDescription, String status, Integer priority, LocalDate startDate, LocalDate endDate) {
+    public Task(String taskName, String taskDescription, String status, Integer priority,Integer taskOrder, LocalDate startDate, LocalDate endDate) {
         this.taskName = taskName;
         this.taskDescription = taskDescription;
         this.status = status;
         this.priority = priority;
+        this.taskOrder = taskOrder;
         this.startDate = startDate;
         this.endDate = endDate;
     }
@@ -83,6 +85,14 @@ public class Task {
 
     public void setPriority(Integer priority) {
         this.priority = priority;
+    }
+
+    public Integer getTaskOrder() {
+        return taskOrder;
+    }
+
+    public void setTaskOrder(Integer taskOrder) {
+        this.taskOrder = taskOrder;
     }
 
     public LocalDate getStartDate() {

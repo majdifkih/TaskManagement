@@ -15,12 +15,15 @@ import java.util.List;
 @Repository
 public interface SprintRepository extends JpaRepository<Sprint,Long> {
     List<Sprint> findByProject(Project prject);
-    @Query("SELECT s FROM Sprint s WHERE " +
+    @Query("SELECT s FROM Sprint s WHERE s.project.projectId = :projectId AND " +
             "(:sprintName IS NULL OR LOWER(s.sprintName) LIKE LOWER(CONCAT('%', :sprintName, '%'))) AND " +
             "(:endDate IS NULL OR s.endDate = :endDate) AND " +
             "(:status IS NULL OR LOWER(s.status) = LOWER(:status))")
-    List<Sprint> searchSprints(@Param("sprintName") String sprintName,
+    List<Sprint> searchSprints(@Param("projectId") Long projectId,
+                               @Param("sprintName") String sprintName,
                                @Param("endDate") LocalDate endDate,
                                @Param("status") String status);
 
+    boolean existsBySprintName(String sprintName);
+    boolean existsBySprintNameAndSprintId(String sprintName, Long sprintId);
 }
