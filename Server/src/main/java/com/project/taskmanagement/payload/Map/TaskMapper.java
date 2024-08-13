@@ -17,10 +17,19 @@ public interface TaskMapper {
     Task toEntity(TaskDto taskDto);
 
 
-    @Mapping(target = "taskId", ignore = true) // Ignore taskId
-    @Mapping(target = "status", ignore = true) // Ignore status
-    @Mapping(target = "taskOrder", ignore = true) // Ignore taskOrder
-    @Mapping(target = "sprint", ignore = true) // Ignore sprint
+    @Mapping(target = "taskId", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "taskOrder", ignore = true)
+    @Mapping(target = "sprint", ignore = true)
     void updateEntityFromDto(TaskDto taskDto, @MappingTarget Task task);
+
+    @Mapping(target = "taskId", ignore = true)
+    @Mapping(target = "taskName", ignore = true)
+    @Mapping(target = "taskDescription", ignore = true)
+    @Mapping(target = "priority", ignore = true)
+    @Mapping(target = "startDate", ignore = true)
+    @Mapping(target = "endDate", ignore = true)
+    @Mapping(target = "sprint", ignore = true)
+    void updateStatusAndOrderFromDto(TaskDto taskDto, @MappingTarget Task task);
     List<TaskDto> toDtoList(List<Task> tasks);
 }

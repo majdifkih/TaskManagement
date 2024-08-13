@@ -22,7 +22,7 @@ public interface SprintMapper {
 
     @Mapping(target = "sprintId", ignore = true)
     void updateEntityFromDto(SprintDto sprintDto, @MappingTarget Sprint sprint);
-    //@Mapping(target = "priority", ignore = true)
+
     List<SprintDto> toDtoList(List<Sprint> sprints);
 
     List<Sprint> toEntityList(List<SprintDto> sprintDtos);

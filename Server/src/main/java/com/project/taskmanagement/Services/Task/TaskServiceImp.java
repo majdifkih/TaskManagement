@@ -3,8 +3,10 @@ package com.project.taskmanagement.Services.Task;
 import com.project.taskmanagement.Entities.Sprint;
 import com.project.taskmanagement.Entities.Task;
 import com.project.taskmanagement.Entities.User;
+import com.project.taskmanagement.payload.Map.ProfilMapper;
 import com.project.taskmanagement.payload.Map.SprintMapper;
 import com.project.taskmanagement.payload.Map.TaskMapper;
+import com.project.taskmanagement.payload.request.ProfilDto;
 import com.project.taskmanagement.payload.request.SprintDto;
 import com.project.taskmanagement.payload.request.TaskDto;
 import com.project.taskmanagement.payload.response.MessageResponse;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -35,6 +38,8 @@ public class TaskServiceImp implements TaskService {
     private TaskMapper taskMapper;
     @Autowired
     private SprintMapper sprintMapper;
+    @Autowired
+    private ProfilMapper profilMapper;
     @Autowired
     private UserRepository userRepository;
 
@@ -149,26 +154,32 @@ public class TaskServiceImp implements TaskService {
     }
 
     @Override
-    public ResponseEntity<MessageResponse> assignUsersToTask(Long taskId, List<Long> userIds) {
+    public ResponseEntity<MessageResponse> assignUserToTask(Long taskId, Long userId) {
         Optional<Task> taskOptional = taskRepository.findById(taskId);
-        if (taskOptional.isPresent()) {
-            Task task = taskOptional.get();
-            Set<User> users = task.getUsers();  // Utiliser les utilisateurs déjà associés à la tâche
-            List<User> usersToAdd = userRepository.findAllById(userIds);
-
-            for (User user : usersToAdd) {
-                if (!users.contains(user)) {
-                    users.add(user);  // Ajouter seulement les utilisateurs non encore associés
-                }
-            }
-
-            task.setUsers(users);
-            taskRepository.save(task);
-            return ResponseEntity.ok(new MessageResponse("Users assigned to task successfully!"));
-        } else {
+        if (!taskOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new MessageResponse("Task not found"));
         }
+
+        Task task = taskOptional.get();
+        User user = userRepository.findById(userId).orElse(null);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new MessageResponse("User not found"));
+        }
+
+        Set<User> users = task.getUsers();  // Utiliser les utilisateurs déjà associés à la tâche
+
+        if (users.contains(user)) {
+            return ResponseEntity.ok(new MessageResponse("User already assigned!"));
+        }
+
+        users.add(user);  // Ajouter l'utilisateur à la tâche
+        task.setUsers(users);
+        taskRepository.save(task);
+
+        return ResponseEntity.ok(new MessageResponse("User assigned to task successfully!"));
     }
 
     @Override
@@ -243,12 +254,12 @@ public class TaskServiceImp implements TaskService {
     }
     @Override
     public ResponseEntity<MessageResponse> updateStatusAndOrder(Long taskId, TaskDto taskDto) {
-
-
         Optional<Task> task = taskRepository.findById(taskId);
         if (task.isPresent()) {
             Task existingTask = task.get();
-            taskMapper.updateEntityFromDto(taskDto, existingTask);
+
+            taskMapper.updateStatusAndOrderFromDto(taskDto, existingTask);
+
             if (taskDto.getSprintId() != null) {
                 Optional<Sprint> sprint = sprintRepository.findById(taskDto.getSprintId());
                 sprint.ifPresent(existingTask::setSprint);
@@ -262,5 +273,17 @@ public class TaskServiceImp implements TaskService {
                     .body(new MessageResponse("Task not found"));
         }
     }
+        @Override
+        public List<ProfilDto> getUsersByTaskId(Long taskId) {
+            // Récupérer la tâche en fonction de l'ID
+            Optional<Task> taskOpt = taskRepository.findById(taskId);
+            if (taskOpt.isPresent()) {
+                Task task = taskOpt.get();
+                // Convertir les utilisateurs associés en ProfilDto
+                return profilMapper.toDtoList(new ArrayList<>(task.getUsers()));
+            } else {
+                throw new RuntimeException("Task not found with ID: " + taskId);
+            }
+        }
 
 }
