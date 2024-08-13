@@ -71,14 +71,17 @@ export class TaskService {
     );
   }
 
-  assignUsersToTask(taskId: number,userTaskData:any): Observable<any> {
+
+  assignUsersToTask(taskId: number, userId: number): Observable<any> {
     let headers = this.httpOptions.headers;
     headers = this.addAuthorizationHeader(headers);
-
-    return this.http.post<any>(`${this.host}/addusertask/${taskId}`, userTaskData, { headers }).pipe(
+  
+    return this.http.post<any>(`${this.host}/userstasks/${taskId}/${userId}`, {}, { headers }).pipe(
       tap(_ => console.log('User assigned to task successfully'))
     );
   }
+  
+
   
   unassignUserFromTask(taskId: number,userId:number): Observable<any> {
     let headers = this.httpOptions.headers;
@@ -94,5 +97,13 @@ export class TaskService {
     headers = this.addAuthorizationHeader(headers);
 
     return this.http.put<any>(`${this.host}/updatestatus/${id}`, taskData, { headers });
+}
+getAssignedUsers(taskId: number): Observable<any> {
+  let headers = this.httpOptions.headers;
+  headers = this.addAuthorizationHeader(headers);
+
+  return this.http.get<any>(`${this.host}/users/${taskId}`, { headers }).pipe(
+    tap(_ => console.log("Users assigns retrieved successfully"))
+  );
 }
 }

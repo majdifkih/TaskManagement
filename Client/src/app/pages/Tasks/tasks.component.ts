@@ -4,48 +4,52 @@ import { CdkDragDrop,
   CdkDropListGroup,
   moveItemInArray,
   transferArrayItem} from '@angular/cdk/drag-drop';
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { TaskService } from '../../services/tasks/task.service';
+import { ProfilService } from '../../services/profil/profil.service';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.css'
 })
-export class TasksComponent {
+export class TasksComponent implements OnInit  {
   sprintId: number = 0;
   addTaskForm!: FormGroup;
   EditTaskForm!: FormGroup;
+  searchUserForm!: FormGroup;
+  TaskName: string = '';
   Tasks: any[] = [];
   task: any;
   ToDoTasks: any[] = [];
   DoingTasks: any[] = [];
   DoneTasks: any[] = [];
   showModal: boolean = false;
-  isOpen:boolean = false;
   delId: number = 0;
   showAlert = false;
   currentTaskId : number = 0;
   currentviewTaskId : number = 0;
   showEdit: boolean = false;
-  dropdowns: boolean = false;
-  noResult:boolean = false;
-  openIndex: number | null = null;
   showdetail: boolean = false;
   showAssignUser: boolean = false;
   openAccordions: { [key: string]: boolean } = {};
-
+  assignedUsers: any[] = [];
+  allUsers: any[] = [];
+  filteredUsers: any[] = [];
+  searchControl = new FormControl();
   constructor(private route: ActivatedRoute,
     private taskService:TaskService,
     private fb: FormBuilder,
-    private _toastr: ToastrService) { }
+    private _toastr: ToastrService,
+    private profilService:ProfilService) { }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
-    this.sprintId = id !== null ? +id : 0; 
+    this.sprintId = id !== null ? +id : 0;
     this.addTaskForm = this.fb.group({
       taskName: ['', [Validators.required]],
       taskDescription: ['', [Validators.required]],
@@ -58,9 +62,14 @@ export class TasksComponent {
       taskDescription: [''],
       startDate: [''],
       endDate: ['']
-    });  
-    this.getAllTasks();  
-  }
+    }); 
+    this.searchUserForm = this.fb.group({
+      username: [''],
+    });    
+    this.getAllTasks();
+    
+   
+}
   
   drop(event: CdkDragDrop<any[]>) {
     const movedTask = event.item.data;
@@ -94,7 +103,7 @@ export class TasksComponent {
  
   updateTaskStatus(task: any, containerId: string, currentIndex: number, allTasksInColumn: any[]) {
     const updatedStatus = this.getStatusFromContainerId(containerId);
-    const updatedTask = { ...task, status: updatedStatus, taskOrder: currentIndex + 1 };
+    const updatedTask = { status: updatedStatus, taskOrder: currentIndex + 1 };
   
     console.log('Updated Task:', updatedTask); // Debugging line
   
@@ -105,7 +114,7 @@ export class TasksComponent {
   
         // Réorganiser les tâches dans la colonne cible
         allTasksInColumn.forEach((t: any, index: number) => {
-          if (t.taskId !== updatedTask.taskId) {
+          if (t.taskId !== task.taskId) {
             t.taskOrder = index + 1;
             this.taskService.updatestatus(t, t.taskId).subscribe({
               error: (error) => console.error('Error updating task order:', error)
@@ -231,7 +240,88 @@ export class TasksComponent {
     });
   }
 
+
+  
+  allEmployees(): void {
+    this.profilService.getAllEmployees().subscribe({
+      next: (response: any) => {
+        this.allUsers = response;
+        this.loadAssignedUsers(); // Assurez-vous de charger les utilisateurs assignés
+      },
+      error: (error) => {
+        console.error('Error fetching employees:', error);
+      }
+    });
+  }
+  
+
+  filterEmployees(searchValue: string) {
+    return this.allUsers.filter(user =>
+      user.username.toLowerCase().startsWith(searchValue.toLowerCase())
+    );
+  }
+  
+
+
+  assignUserToTask(userId: number): void {
+    if (userId && this.currentviewTaskId) {
+      this.taskService.assignUsersToTask(this.currentviewTaskId, userId).subscribe({
+        next: (response: any) => {
+          this._toastr.success('User assigned to task successfully', 'Success');
+          this.loadAssignedUsers(); // Recharge les utilisateurs assignés
+         
+        },
+        error: (error) => {
+          console.error('Error assigning user to task:', error);
+          this._toastr.error('Error assigning user to task', 'Error');
+        }
+      });
+    } else {
+      this._toastr.error('Invalid user or task ID', 'Error');
+    }
+  }
+  
+
+  unassignUser(userId: number): void {
+    
+    console.log("assignedUsers=",this.assignedUsers);
+    this.taskService.unassignUserFromTask(this.currentviewTaskId, userId).subscribe({
+      next: (response: any) => {
+        this._toastr.success('User unassigned from task successfully', 'Success');
+        this.loadAssignedUsers(); // Recharge les utilisateurs assignés
+      },
+      error: (error) => {
+        console.error('Error unassigning user from task:', error);
+        this._toastr.error('Error unassigning user from task', 'Error');
+      }
+    });
+  }
+
+  loadAssignedUsers(): void {
+    this.taskService.getAssignedUsers(this.currentviewTaskId).subscribe({
+      next: (response: any) => {
+        this.assignedUsers = response;
+        this.filterUnassignedUsers(); // Filtre les utilisateurs non assignés après avoir récupéré les assignés
+      },
+      error: (error) => {
+        console.error('Error fetching assigned users:', error);
+      }
+    });
+  }
+  filterUnassignedUsers(): void {
+    this.filteredUsers = this.allUsers.filter(user =>
+      !this.assignedUsers.some(assignedUser => assignedUser.id === user.id)
+    );
+  }
+    
+
+  isUserAssigned(userId: number): boolean {
+    return this.assignedUsers.some(user => user.id === userId);
+  }
+
+
   onAddTask() {
+    this.addTaskForm.patchValue({ sprintId: this.sprintId });
     this.showModal = true;
   }
 
@@ -272,6 +362,7 @@ export class TasksComponent {
     this.showdetail = true;
     this.currentviewTaskId = task.taskId;
     this.getTaskDetail(task.taskId); 
+    this.loadAssignedUsers();
   }
   
   closeModalDetail() {
@@ -280,12 +371,19 @@ export class TasksComponent {
 
   onModalAssignUser(task: any) {
     this.showAssignUser = true;
+    this.TaskName=task.taskName;
     this.currentviewTaskId = task.taskId;
+    this.allEmployees(); // Récupérez tous les employés au démarrage
+    this.loadAssignedUsers();
+    this.searchControl.valueChanges.subscribe(value => {
+      this.filteredUsers = this.filterEmployees(value);
+    });
   }
   
   closeModalAssignUser() {
     this.showAssignUser = false;
   }
+  
   showDatePicker(event: Event): void {
     const input = event.target as HTMLInputElement;
     input.showPicker(); 
@@ -294,11 +392,16 @@ export class TasksComponent {
 
   toggleAccordion(taskId: number): void {
     this.openAccordions[taskId] = !this.openAccordions[taskId];
+   
   }
+  
 
   // Méthode pour vérifier si un accordéon est ouvert
   isAccordionOpen(taskId: number): boolean {
     return this.openAccordions[taskId] || false;
   }
+
+
+  
 
 }
