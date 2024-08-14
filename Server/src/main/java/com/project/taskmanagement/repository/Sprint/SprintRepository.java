@@ -24,6 +24,6 @@ public interface SprintRepository extends JpaRepository<Sprint,Long> {
                                @Param("endDate") LocalDate endDate,
                                @Param("status") String status);
 
-    boolean existsBySprintName(String sprintName);
+    boolean existsBySprintNameAndProject_ProjectId(String sprintName, Long projectId);
     boolean existsBySprintNameAndSprintId(String sprintName, Long sprintId);
 }

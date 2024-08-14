@@ -28,6 +28,10 @@ public class User {
 	@OneToMany(mappedBy = "projectId", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<Project> projects;
+
+	@OneToMany(mappedBy = "commentId", cascade = CascadeType.ALL)
+	@JsonManagedReference
+	private List<Comment> comments;
 	public User() {
 	}
 
@@ -92,5 +96,13 @@ public class User {
 
 	public void setProjects(List<Project> projects) {
 		this.projects = projects;
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
 	}
 }

@@ -31,16 +31,19 @@ public class SprintServiceImp implements SprintService {
 
     @Override
     public ResponseEntity<MessageResponse> addSprint(SprintDto sprintDto) {
-        if (sprintRepository.existsBySprintName(sprintDto.getSprintName())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("SprintName already exists"));
+
+        if (sprintRepository.existsBySprintNameAndProject_ProjectId(sprintDto.getSprintName(), sprintDto.getProjectId())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("SprintName already exists in this project"));
         }
+
+
         String validationMessage = validateSprintDates(sprintDto);
         if (validationMessage != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse(validationMessage));
         }
 
-        Optional<Project> project = projectRepository.findById(sprintDto.getProjectId());
 
+        Optional<Project> project = projectRepository.findById(sprintDto.getProjectId());
         if (project.isPresent()) {
             Sprint sprint = sprintMapper.toEntity(sprintDto);
             sprint.setProject(project.get());

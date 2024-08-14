@@ -90,12 +90,16 @@ public class ProjectServiceImp implements ProjectService {
     public ResponseEntity<MessageResponse> deleteProject(Long id) {
         Optional<Project> projectOptional = projectRepository.findById(id);
         if (projectOptional.isPresent()) {
-            projectRepository.deleteById(id);
+            Project project = projectOptional.get();
+
+            projectRepository.delete(project);
+
             return ResponseEntity.ok(new MessageResponse("Project deleted successfully!"));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Project not found"));
         }
     }
+
 
     @Override
     public ResponseEntity<List<ProjectDto>> getAllProjects() {
