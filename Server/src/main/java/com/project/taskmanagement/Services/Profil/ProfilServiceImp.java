@@ -75,22 +75,7 @@ public class ProfilServiceImp implements ProfilService{
         }
     }
 
-    @Override
-    public ResponseEntity<ProfilDto> getUserByUsername(String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
 
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            if (user.getRole() == Role.ROLE_EMPLOYEE) {
-                ProfilDto profilDto = profilMapper.toDto(user);
-                return ResponseEntity.ok(profilDto);
-            } else {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null); // or other appropriate status
-            }
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-    }
 
 
 //    @Override

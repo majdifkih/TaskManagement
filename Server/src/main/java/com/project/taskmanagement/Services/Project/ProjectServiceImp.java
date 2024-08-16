@@ -127,4 +127,14 @@ public class ProjectServiceImp implements ProjectService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
         }
     }
+@Override
+public List<ProjectDto> getProjectsForUser() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+    Long userId = userDetails.getId();
+
+    List<Project> projects = projectRepository.findProjectsByUserId(userId);
+
+    return projectMapper.toDtoList(projects);
+}
 }

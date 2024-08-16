@@ -49,4 +49,10 @@ public class ProjectController {
             return projectService.deleteProject(id);
 
     }
+
+    @GetMapping("/userprojects")
+    public ResponseEntity<List<ProjectDto>> getProjectsForUser() {
+        List<ProjectDto> projects = projectService.getProjectsForUser();
+        return ResponseEntity.ok(projects);
+    }
 }

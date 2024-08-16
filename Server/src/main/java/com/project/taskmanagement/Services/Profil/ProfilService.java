@@ -10,6 +10,5 @@ public interface ProfilService {
     ResponseEntity<List<ProfilDto>> getEmployeesUsers();
     ResponseEntity<MessageResponse> updateProfile(ProfilDto profilDto);
     ResponseEntity<ProfilDto> getUserDetail();
-    ResponseEntity<ProfilDto> getUserByUsername(String username);
    // ResponseEntity<MessageResponse> deleteUser(Long userId);
 }

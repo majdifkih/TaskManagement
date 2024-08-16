@@ -1,5 +1,6 @@
 package com.project.taskmanagement.Services.Project;
 
+import com.project.taskmanagement.Entities.Project;
 import com.project.taskmanagement.payload.request.ProjectDto;
 import com.project.taskmanagement.payload.response.MessageResponse;
 import org.springframework.http.ResponseEntity;
@@ -13,4 +14,5 @@ public interface ProjectService {
     public ResponseEntity<List<ProjectDto>> getAllProjects();
     public ResponseEntity<ProjectDto> getProjectById(Long id);
     public ResponseEntity<List<ProjectDto>> getProjectsByUser(Long userId);
+    List<ProjectDto> getProjectsForUser();
 }

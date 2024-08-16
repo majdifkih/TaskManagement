@@ -27,10 +27,6 @@ public class ProfilController {
         return profilService.getUserDetail();
     }
 
-    @GetMapping("/userbyusername")
-    public ResponseEntity<ProfilDto> getUserByUsername( @RequestParam() String username) {
-        return profilService.getUserByUsername(username);
-    }
 
     @PutMapping("/updateuser")
     public ResponseEntity<MessageResponse> updateProfile(@RequestBody ProfilDto profilDto) {
