@@ -41,12 +41,7 @@ export class ProfilService {
     return this.http.get<any>(`${this.host}/userdetail`, { headers });
   }
 
-  getUserByUsername(username: string): Observable<any> {
-    let headers = this.httpOptions.headers;
-    headers = this.addAuthorizationHeader(headers);
 
-    return this.http.get<any>(`${this.host}/userbyusername?username=${username}`, { headers });
-  }
   updateProfile(profileData: any): Observable<any> {
     let headers = this.httpOptions.headers;
     headers = this.addAuthorizationHeader(headers);

@@ -16,11 +16,19 @@
         <div class="flex-1 text-center">
             <div class="inline-flex items-center gap-2">
                 <h1 class="text-4xl font-bold text-gray-800 dark:text-white p-2">Backlog</h1>
-                <svg data-popover-target="popover-bottom" data-popover-placement="bottom" class="w-6 h-6 text-gray-800 dark:text-white mt-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                  <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm9.408-5.5a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2h-.01ZM10 10a1 1 0 1 0 0 2h1v3h-1a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2h-1v-4a1 1 0 0 0-1-1h-2Z" clip-rule="evenodd"/>
-              </svg>
+                <div mat-raised-button
+        matTooltip="{{ProjectDescription}}"
+        aria-label="Button that displays a tooltip when focused or hovered over">
+        <svg data-popover-target="popover-bottom" data-popover-placement="bottom" class="w-6 h-6 text-gray-800 dark:text-white mt-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+          <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm9.408-5.5a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2h-.01ZM10 10a1 1 0 1 0 0 2h1v3h-1a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2h-1v-4a1 1 0 0 0-1-1h-2Z" clip-rule="evenodd"/>
+      </svg>
+</div>
+
+
+
             </div>
         </div>
+        
         
         <div class="flex-none">
             <button (click)="onAddSprint()" type="button" class="text-white inline-flex items-center justify-center space-x-1 py-3 px-4 border border-transparent bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-2">
@@ -30,16 +38,8 @@
                 <div>Add Sprint</div>
             </button>
         </div>
-        
-        <div data-popover id="popover-bottom" role="tooltip" class="absolute z-10 invisible inline-block w-72 text-base text-gray-700 transition-opacity duration-300 bg-white border border-gray-300 rounded-xl shadow-xl opacity-0 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-900">
-          <div class="px-4 py-3 bg-blue-200 border-b border-gray-300 rounded-t-xl dark:border-gray-700 dark:bg-gray-800">
-              <h3 class="font-bold text-gray-900 dark:text-white">Backlog Description</h3>
-          </div>
-          <div class="px-4 py-3">
-              <p class="leading-relaxed">{{ProjectDescription}}</p>
-          </div>
-          <div data-popper-arrow class="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600"></div>
-      </div>
+
+      
       
     </div>
     

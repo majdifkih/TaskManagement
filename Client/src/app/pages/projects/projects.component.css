@@ -1,77 +1,55 @@
 .project-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
-  
-  .projectComp {
-    display: flex;
-    width: 100%;
-    background-color: rgb(241, 246, 246);
-  }
-  
-  .project-header-container {
-    width: 90%;
-    position: fixed;
-    top: 0;
-    right: 0;
-    z-index: 10; /* Ensure the header stays on top of other content */
-  }
-  
-  .project-header {
-    width: 100%;
-  }
-  
-  .project-main-content {
-    flex: 1;
-    padding: 20px;
-  }
-  
-  .project-footer {
-    width: 100%;
-    bottom: 0;
-    left: 0;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden; /* Évite le défilement horizontal */
+}
 
+.projectComp {
+  display: flex;
+  width: 100%;
+  background-color: rgb(241, 246, 246);
+  overflow: hidden; /* Assure qu'il n'y a pas de défilement horizontal */
+}
 
-  .project-container {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .project-comp {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .project-header {
-    flex: none;
-  }
-  
-  .project-main-content {
-    flex: 1;
-    padding: 16px;
-  }
-  
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
-  
-  .project-card {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 16px;
-    transition: box-shadow 0.3s;
-  }
-  
-  .project-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  
-  
-  
+.project-header-container {
+  width: 100%; /* Utilise la largeur complète */
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 10; /* Assure que le header reste au-dessus des autres contenus */
+}
+
+.project-header {
+  width: 100%;
+}
+
+.project-main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto; /* Permet le défilement vertical si nécessaire */
+}
+
+.project-footer {
+  width: 100%;
+  position: relative; /* Positionne le footer en bas du conteneur */
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.project-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  transition: box-shadow 0.3s;
+  overflow: hidden; /* Évite le débordement */
+}
+
+.project-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}

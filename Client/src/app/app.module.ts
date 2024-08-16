@@ -23,6 +23,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { TasksComponent } from './pages/Tasks/tasks.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {MatButtonModule} from '@angular/material/button';
+import {MatMenuModule} from '@angular/material/menu';
+import { ProfilComponent } from './pages/profil/profil.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,8 @@ import {MatButtonModule} from '@angular/material/button';
     HeaderComponent,
     ProjectsComponent,
     TasksComponent,
-    BacklogComponent
+    BacklogComponent,
+    ProfilComponent
   ],
   imports: [
     BrowserModule,
@@ -57,7 +60,8 @@ import {MatButtonModule} from '@angular/material/button';
     MatNativeDateModule,
     MatIconModule,
     MatTooltipModule,
-    MatButtonModule
+    MatButtonModule,
+    MatMenuModule
   ],
   providers: [
     provideNativeDateAdapter()

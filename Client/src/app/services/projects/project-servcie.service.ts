@@ -36,14 +36,14 @@ export class ProjectService {
 
 
 
-  // getAllProjects(): Observable<any[]> {
-  //   let headers = this.httpOptions.headers;
-  //   headers = this.addAuthorizationHeader(headers);
+  AllProjectsAssignToUser(): Observable<any[]> {
+    let headers = this.httpOptions.headers;
+    headers = this.addAuthorizationHeader(headers);
 
-  //   return this.http.get<any[]>(`${this.host}/allproject`, { headers }).pipe(
-  //     tap(_ => console.log("Projects retrieved successfully"))
-  //   );
-  // }
+    return this.http.get<any[]>(`${this.host}/userprojects`, { headers }).pipe(
+      tap(_ => console.log("Projects retrieved successfully"))
+    );
+  }
   
   AllProjectsByUser(id: number): Observable<any[]> {
     let headers = this.httpOptions.headers;

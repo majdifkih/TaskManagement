@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './pages/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { HeaderComponent } from './Components/header/header.component';
 import { ProjectsComponent } from './pages/projects/projects.component';
 import { BacklogComponent } from './pages/Backlog/backlog/backlog.component';
 import { TasksComponent } from './pages/Tasks/tasks.component';
+import { ProfilComponent } from './pages/profil/profil.component';
 
 const routes: Routes = [
   {
@@ -32,6 +32,10 @@ const routes: Routes = [
   {
     path:'backlog/:id',
     component: BacklogComponent
+  },
+  {
+    path:'profil',
+    component: ProfilComponent
   },
 ];
 

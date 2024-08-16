@@ -10,6 +10,7 @@ import {jwtDecode} from 'jwt-decode';
 })
 export class ProjectsComponent implements OnInit {
   projects: any[] = [];
+  Assignedprojects: any[] = [];
   showModal = false;
   isEditMode = false;
   projectToEdit: any = null;
@@ -17,7 +18,7 @@ export class ProjectsComponent implements OnInit {
   currentProjectId: number = 0;
   delId: number = 0;
   showAlert = false;
-
+  isAdmin: boolean = false;
   constructor(
     private projectService: ProjectService,
     private fb: FormBuilder,
@@ -25,15 +26,57 @@ export class ProjectsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getAllProjects();
     this.addProjectForm = this.fb.group({
       projectName: ['', [Validators.required]],
       description: ['', [Validators.required]],
       admin: []
     });
+    console.log("Assignedprojects",this.Assignedprojects);
+    this.loadProjects();
   }
 
   get f() { return this.addProjectForm.controls; }
+
+  getUserRole(){
+    const accessToken = localStorage.getItem('accessToken'); 
+    if (!accessToken) {
+      return null; 
+    }
+  
+    try {
+      const decodedToken: any = jwtDecode(accessToken);
+      return decodedToken.role || null; 
+    } catch (error) {
+      console.error('Error decoding JWT:', error);
+      return null;
+    }
+  }
+
+  loadProjects(): void {
+    let role=this.getUserRole();
+    console.log('role',role);
+      if (role === 'ROLE_ADMIN') {
+        this.isAdmin = true;
+        this.getAllProjects();
+      } else {
+        this.ProjectsAssignToUser();
+        this.isAdmin = false;
+      }
+  }
+  
+
+  ProjectsAssignToUser(): void {
+    this.projectService.AllProjectsAssignToUser().subscribe({
+      next: (response: any) => {
+        console.log(response);
+        this.projects = response;
+       
+      },
+      error: (error) => {
+        console.error('Error fetching projects:', error);
+      }
+    });
+  }
 
   getAllProjects(): void {
     const userId = this.getUserId();

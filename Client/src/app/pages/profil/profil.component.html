@@ -1,0 +1,24 @@
+<div class="profil-container">
+    <div class="profilComp">
+      <div>
+        <app-side-bar></app-side-bar>
+      </div>
+      <div class="profil-header border-b border-gray-300 dark:border-gray-700">
+        <app-header></app-header>
+      </div>
+    </div>
+  
+    <div class="profil-main-content">
+        <h1></h1>
+    <div *ngFor="let userDetail of user">
+        <p>Name:</p> {{userDetail.username}}
+
+    </div>
+ 
+    </div>
+  
+    <div class="profil-footer">
+      <app-footer></app-footer>
+    </div>
+  </div>
+  

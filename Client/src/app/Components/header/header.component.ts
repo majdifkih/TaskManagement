@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth/auth-service.service';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-header',
@@ -9,8 +10,33 @@ import { AuthService } from '../../services/auth/auth-service.service';
 export class HeaderComponent {
   showNotification: boolean = false;
   dropdowns: boolean = false;
+  isAdmin: boolean = false;
   constructor(private authService:AuthService){
     
+  }
+  ngOnInit(): void {
+
+    this.RoleCheck();
+  }
+
+  getUserRole(){
+    const accessToken = localStorage.getItem('accessToken'); 
+    if (!accessToken) {
+      return null; 
+    }
+  
+    try {
+      const decodedToken: any = jwtDecode(accessToken);
+      return decodedToken.role || null; 
+    } catch (error) {
+      console.error('Error decoding JWT:', error);
+      return null;
+    }
+  }
+
+  RoleCheck(): void {
+    let role = this.getUserRole();
+    this.isAdmin = role === 'ROLE_ADMIN';
   }
 
   onNotification() {

@@ -1,0 +1,37 @@
+.profil-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden; /* Évite le défilement horizontal */
+  }
+  
+  .profilComp {
+    display: flex;
+    width: 100%;
+    background-color: rgb(241, 246, 246);
+    overflow: hidden; /* Assure qu'il n'y a pas de défilement horizontal */
+  }
+  
+  .profil-header-container {
+    width: 100%; /* Utilise la largeur complète */
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 10; /* Assure que le header reste au-dessus des autres contenus */
+  }
+  
+  .profil-header {
+    width: 100%;
+  }
+  
+  .profil-main-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto; /* Permet le défilement vertical si nécessaire */
+  }
+  
+  .profil-footer {
+    width: 100%;
+    position: relative; /* Positionne le footer en bas du conteneur */
+  }
+  

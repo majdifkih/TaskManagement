@@ -221,6 +221,7 @@ export class BacklogComponent implements OnInit {
     this.openIndex = this.openIndex === index ? null : index;
   }
   onAddSprint() {
+    this.addSprintForm.patchValue({ projectId: this.projectId });
     this.showModal = true;
   }
 

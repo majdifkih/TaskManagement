@@ -11,6 +11,8 @@ import { ToastrService } from 'ngx-toastr';
 import { TaskService } from '../../services/tasks/task.service';
 import { ProfilService } from '../../services/profil/profil.service';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { CommentService } from '../../services/comments/comment.service';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-tasks',
@@ -41,11 +43,16 @@ export class TasksComponent implements OnInit  {
   allUsers: any[] = [];
   filteredUsers: any[] = [];
   searchControl = new FormControl();
+
+  Comments: any[] = [];
+  addCommentForm!: FormGroup;
+  editingCommentId: number | null = null;
   constructor(private route: ActivatedRoute,
     private taskService:TaskService,
     private fb: FormBuilder,
     private _toastr: ToastrService,
-    private profilService:ProfilService) { }
+    private profilService:ProfilService,
+    private commentService:CommentService) { }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -66,6 +73,10 @@ export class TasksComponent implements OnInit  {
     this.searchUserForm = this.fb.group({
       username: [''],
     });    
+
+    this.addCommentForm = this.fb.group({
+      content: [''],
+    }); 
     this.getAllTasks();
     
    
@@ -363,6 +374,7 @@ export class TasksComponent implements OnInit  {
     this.currentviewTaskId = task.taskId;
     this.getTaskDetail(task.taskId); 
     this.loadAssignedUsers();
+    this.getAllComments(task.taskId);
   }
   
   closeModalDetail() {
@@ -396,12 +408,105 @@ export class TasksComponent implements OnInit  {
   }
   
 
-  // Méthode pour vérifier si un accordéon est ouvert
   isAccordionOpen(taskId: number): boolean {
     return this.openAccordions[taskId] || false;
   }
 
 
-  
+//Comment Management
+
+
+ getAllComments(taskId:number): void {
+  this.commentService.AllCommentsByTask(taskId).subscribe({
+    next: (response: any) => {
+      this.Comments=response;
+      console.log(response);
+    },
+    error: (error) => {
+      console.error('Error fetching comments:', error);
+    }
+  });
+}
+
+addComment(taskId: number) {
+  if (this.addCommentForm.valid) {
+    console.log("Form values before sending:", this.addCommentForm.value);
+
+    this.commentService.addComment(taskId,this.addCommentForm.value).subscribe({
+      next: (data: any) => {
+        this.getAllComments(taskId);
+        this.addCommentForm.reset();
+        this._toastr.success('Comment added successfully', 'Success');
+      },
+      error: (error) => {
+        console.error('Error adding Comment:', error);
+        this._toastr.error('Error adding Comment', 'Error');
+      }
+    });
+  } else {
+    console.error('Sprint form is invalid');
+    this._toastr.error('Please fill out all required fields', 'Error');
+  }
+}
+deleteComment(comment: any) {
+  let userName = this.getUserName();
+  if (comment.userComment === userName) {
+    this.commentService.deleteComment(comment.commentId).subscribe({
+      next: (response: any) => {
+        this._toastr.success('Comment deleted successfully', 'Success');
+        this.getAllComments(this.currentviewTaskId);
+      },
+      error: (error) => {
+        console.error('Error deleting Comment:', error);
+        this._toastr.error('Error deleting Comment', 'Error');
+      }
+    });
+  } else {
+    this._toastr.error('You can only delete your own comments', 'Error');
+  }
+}
+
+getUserName(){
+  const accessToken = localStorage.getItem('accessToken'); 
+  if (!accessToken) {
+    return null; 
+  }
+
+  try {
+    const decodedToken: any = jwtDecode(accessToken);
+    return decodedToken.username || null; 
+  } catch (error) {
+    console.error('Error decoding JWT:', error);
+    return null;
+  }
+}
+
+updateComment(commentId: number) {
+  const updatedContent = this.Comments.find(comment => comment.commentId === commentId)?.content;
+
+  if (updatedContent) {
+    this.commentService.updateComment({ content: updatedContent }, commentId).subscribe({
+      next: (data: any) => {
+        this.getAllComments(this.currentviewTaskId);
+        this.editingCommentId = null;
+        this._toastr.success('Comment updated successfully', 'Success');
+      },
+      error: (error) => {
+        console.error('Error updating Comment:', error);
+        this._toastr.error('Error updating Comment', 'Error');
+      }
+    });
+  }
+}
+
+OnEditComment(comment: any) {
+  let userName = this.getUserName();
+
+  if (comment.userComment === userName) {
+    this.editingCommentId = comment.commentId;
+  } else {
+    this._toastr.error('You can only edit your own comments', 'Error');
+  }
+}
 
 }
