@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth-service.service';
 import { Observable, tap } from 'rxjs';
@@ -32,6 +32,15 @@ export class TaskService {
 
     return this.http.get<any[]>(`${this.host}/tasksprint/${id}`, { headers }).pipe(
       tap(_ => console.log("Tasks retrieved successfully"))
+    );
+  }
+
+  MyTasks(): Observable<any[]> {
+    let headers = this.httpOptions.headers;
+    headers = this.addAuthorizationHeader(headers);
+
+    return this.http.get<any[]>(`${this.host}/mytasks`, { headers }).pipe(
+      tap(_ => console.log("My tasks retrieved successfully"))
     );
   }
 
@@ -106,4 +115,30 @@ getAssignedUsers(taskId: number): Observable<any> {
     tap(_ => console.log("Users assigns retrieved successfully"))
   );
 }
+
+GetProjectNameOfTask(taskId: number): Observable<string> {
+  let params = new HttpParams();
+  let headers = this.httpOptions.headers;
+  headers = this.addAuthorizationHeader(headers);
+
+  if (taskId) {
+    params = params.set('taskId', taskId.toString());
+  }
+
+  const options = {
+    headers: headers,
+    params: params,
+    responseType: 'text' as 'json'  // Important: Indiquer que la réponse est de type texte
+  };
+
+  return this.http.get<string>(`${this.host}/projectnameoftask`, options);
+}
+
+getTaskCount(): Observable<any> {
+  let headers = this.httpOptions.headers;
+  headers = this.addAuthorizationHeader(headers);
+
+  return this.http.get<any>(`${this.host}/taskcount`, { headers });
+}
+
 }

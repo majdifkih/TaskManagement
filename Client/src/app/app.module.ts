@@ -25,6 +25,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
 import { ProfilComponent } from './pages/profil/profil.component';
+import { MyTasksComponent } from './pages/my-tasks/my-tasks.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ProfilComponent } from './pages/profil/profil.component';
     ProjectsComponent,
     TasksComponent,
     BacklogComponent,
-    ProfilComponent
+    ProfilComponent,
+    MyTasksComponent
   ],
   imports: [
     BrowserModule,

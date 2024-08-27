@@ -28,7 +28,7 @@ export class ProjectsComponent implements OnInit {
   ngOnInit(): void {
     this.addProjectForm = this.fb.group({
       projectName: ['', [Validators.required]],
-      description: ['', [Validators.required]],
+      description: [''],
       admin: []
     });
     console.log("Assignedprojects",this.Assignedprojects);
@@ -119,7 +119,13 @@ export class ProjectsComponent implements OnInit {
   }
   
   addProject() {
+    this.addProjectForm.markAllAsTouched();
     if (this.addProjectForm.valid) {
+      if (this.addProjectForm.get('projectName')?.invalid) {
+        console.error('projectName is required');
+        return; 
+      }
+  
         const userId = this.getUserId();
   
         if (userId !== null && userId > 0) {
@@ -134,10 +140,8 @@ export class ProjectsComponent implements OnInit {
                 },
                 error: (error) => {
                     
-                    if (error.status === 400) {
+                    if (error.message ="ProjectName already exists") {
                         this._toastr.error('The project name already exists, please choose another one.', 'Duplicate Project Name');
-                    } else {
-                        this._toastr.error('Error adding project', 'Error');
                     }
                 }
             });
@@ -162,11 +166,9 @@ export class ProjectsComponent implements OnInit {
           this.closeModal();
         },
         error: (error) => { 
-          if (error.status === 400)  {
-          this._toastr.error('The project name already exists, please choose another one.', 'Duplicate Project Name');
-      } else {
-          this._toastr.error('Error adding project', 'Error');
-      }
+          if (error.message ="ProjectName already exists") {
+            this._toastr.error('The project name already exists, please choose another one.', 'Duplicate Project Name');
+        }
         }
       });
     }

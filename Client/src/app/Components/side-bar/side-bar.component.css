@@ -8,3 +8,55 @@
 #drawer-overlay.show {
     display: block;
 }
+.sidemain svg {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+
+#drawer-navigation {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#drawer-navigation h5 {
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+ul.space-y-2 li a {
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+ul.space-y-2 li a:hover {
+    background-color: #e2e8f0; /* Light gray background on hover */
+    color: #1a202c; /* Darker text on hover */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+ul.space-y-2 li a svg {
+    transition: transform 0.3s ease, fill 0.3s ease;
+}
+
+ul.space-y-2 li a:hover svg {
+    transform: scale(1.2);
+    fill: #4a5568; /* Change icon color on hover */
+}
+
+#drawer-overlay {
+    transition: opacity 0.3s ease;
+}
+
+/* Example animation for drawer opening */
+#drawer-navigation.open {
+    animation: slideIn 0.3s ease forwards;
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}

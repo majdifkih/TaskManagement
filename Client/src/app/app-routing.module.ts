@@ -6,6 +6,7 @@ import { ProjectsComponent } from './pages/projects/projects.component';
 import { BacklogComponent } from './pages/Backlog/backlog/backlog.component';
 import { TasksComponent } from './pages/Tasks/tasks.component';
 import { ProfilComponent } from './pages/profil/profil.component';
+import { MyTasksComponent } from './pages/my-tasks/my-tasks.component';
 
 const routes: Routes = [
   {
@@ -28,6 +29,10 @@ const routes: Routes = [
   {
     path:'tasks/:id',
     component: TasksComponent
+  },
+  {
+    path:'mytasks',
+    component: MyTasksComponent
   },
   {
     path:'backlog/:id',

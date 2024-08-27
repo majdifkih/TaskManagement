@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { AuthService } from '../../services/auth/auth-service.service';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-side-bar',
@@ -9,7 +10,8 @@ import { AuthService } from '../../services/auth/auth-service.service';
 })
 export class SideBarComponent implements OnInit {
   isDrawerOpen = false;
-
+  isAdmin: boolean = false;
+  showlogoutAlert: boolean = false;
   constructor(private router: Router,private authService:AuthService) {
     // Ecouter les événements de routage pour gérer l'état de la barre latérale
     this.router.events.subscribe((event) => {
@@ -19,8 +21,30 @@ export class SideBarComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
 
+    this.RoleCheck();
+  }
+
+  getUserRole(){
+    const accessToken = localStorage.getItem('accessToken'); 
+    if (!accessToken) {
+      return null; 
+    }
+  
+    try {
+      const decodedToken: any = jwtDecode(accessToken);
+      return decodedToken.role || null; 
+    } catch (error) {
+      console.error('Error decoding JWT:', error);
+      return null;
+    }
+  }
+
+  RoleCheck(): void {
+    let role = this.getUserRole();
+    this.isAdmin = role === 'ROLE_ADMIN';
+  }
   toggleDrawer() {
     this.isDrawerOpen = !this.isDrawerOpen;
     this.updateDrawerState();
@@ -55,6 +79,13 @@ export class SideBarComponent implements OnInit {
         console.error('Error logging out:', error);
       }
     });
+  }
+  confirmationlogoutAlert() {
+    this.showlogoutAlert = true;
+  }
+
+  closeAlert() {
+    this.showlogoutAlert = false;
   }
   
 }

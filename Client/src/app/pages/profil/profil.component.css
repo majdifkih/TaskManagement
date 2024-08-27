@@ -1,37 +1,38 @@
 .profil-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    overflow: hidden; /* Évite le défilement horizontal */
-  }
-  
-  .profilComp {
-    display: flex;
-    width: 100%;
-    background-color: rgb(241, 246, 246);
-    overflow: hidden; /* Assure qu'il n'y a pas de défilement horizontal */
-  }
-  
-  .profil-header-container {
-    width: 100%; /* Utilise la largeur complète */
-    position: fixed;
-    top: 0;
-    right: 0;
-    z-index: 10; /* Assure que le header reste au-dessus des autres contenus */
-  }
-  
-  .profil-header {
-    width: 100%;
-  }
-  
-  .profil-main-content {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto; /* Permet le défilement vertical si nécessaire */
-  }
-  
-  .profil-footer {
-    width: 100%;
-    position: relative; /* Positionne le footer en bas du conteneur */
-  }
-  
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+.profil-header-container {
+  width: 100%; /* Utilise la largeur complète */
+  z-index: 10; /* Assure que le header reste au-dessus des autres contenus */
+}
+
+.profil-header {
+  width: 100%;
+}
+
+
+.main-content {
+  flex: 1;
+  overflow-x: hidden; 
+}
+
+
+
+
+.text-shadow {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Ajustez les valeurs selon vos besoins */
+}
+
+/* Masquer l'icône de visibilité par défaut dans les navigateurs qui l'affichent */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-webkit-search-clear-button,
+input[type="password"]::-webkit-search-decoration,
+input[type="password"]::-webkit-search-results-button,
+input[type="password"]::-webkit-search-results-decoration {
+  display: none;
+}
+
+
+

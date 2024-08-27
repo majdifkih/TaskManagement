@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth/auth-service.service';
 import { jwtDecode } from 'jwt-decode';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -11,7 +12,8 @@ export class HeaderComponent {
   showNotification: boolean = false;
   dropdowns: boolean = false;
   isAdmin: boolean = false;
-  constructor(private authService:AuthService){
+  showlogoutAlert : boolean = false;
+  constructor(private authService:AuthService, private router: Router){
     
   }
   ngOnInit(): void {
@@ -62,5 +64,25 @@ export class HeaderComponent {
     if (!target.closest('.notification') && this.showNotification) {
       this.closeNotification();
     }
+  }
+    
+  logout(){
+    this.authService.logout().subscribe({
+      next: (response: any) => {
+        console.log(response);
+        this.router.navigate(['/login']);
+      },
+      error: (error) => {
+        console.error('Error logging out:', error);
+      }
+    });
+  }
+
+  confirmationlogoutAlert() {
+    this.showlogoutAlert = true;
+  }
+
+  closeAlert() {
+    this.showlogoutAlert = false;
   }
 }

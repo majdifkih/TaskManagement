@@ -1,24 +1,153 @@
 <div class="profil-container">
-    <div class="profilComp">
-      <div>
-        <app-side-bar></app-side-bar>
-      </div>
-      <div class="profil-header border-b border-gray-300 dark:border-gray-700">
-        <app-header></app-header>
-      </div>
-    </div>
-  
-    <div class="profil-main-content">
-        <h1></h1>
-    <div *ngFor="let userDetail of user">
-        <p>Name:</p> {{userDetail.username}}
+  <div class="profil-header border-b border-gray-300 dark:border-gray-700">
+    <app-header></app-header>
+  </div>
 
-    </div>
- 
-    </div>
-  
-    <div class="profil-footer">
-      <app-footer></app-footer>
+  <div class="profil-main-content">
+    <h1 class="text-4xl font-bold text-gray-700 dark:text-white flex-1 text-center mt-5" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">PROFIL</h1>
+
+    <div class="flex items-center justify-center bg-gray-100 dark:bg-gray-900 mt-2 mb-5">
+      <div [ngClass]="{'profil-card': true, 'h-auto': isEditing, 'h-[450px]': !isEditing}" class="w-[400px] bg-white pl-2 pb-2 border border-gray-900 rounded-lg shadow dark:bg-gray-800 transition-all duration-300 ease-in-out">
+        <div class="flex justify-end px-3 pt-3 relative">
+          <i class="material-icons-outlined cursor-pointer  hover:text-shadow-md transition-transform duration-300 transform hover:scale-110"
+             [ngClass]="{
+               'text-gray-700 hover:text-gray-900': !isEditing, 
+               'text-red-600 hover:text-red-700': isEditing
+             }"
+             [matTooltip]="isEditing ? 'Revert to details' : 'Edit profile'"
+             (click)="toggleEditMode()">
+            {{ isEditing ? 'edit_off' : 'edit' }}
+          </i>
+        </div>
+      
+
+        <div class="main-content text-center">
+          <svg class="w-[100px] h-[100px] text-gray-600 dark:text-white mx-auto" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+            <path fill-rule="evenodd" d="M12 20a7.966 7.966 0 0 1-5.002-1.756l.002.001v-.683c0-1.794 1.492-3.25 3.333-3.25h3.334c1.84 0 3.333 1.456 3.333 3.25v.683A7.966 7.966 0 0 1 12 20ZM2 12C2 6.477 6.477 2 12 2s10 4.477 10 10c0 5.5-4.44 9.963-9.932 10h-.138C6.438 21.962 2 17.5 2 12Zm10-5c-1.84 0-3.333 1.455-3.333 3.25S10.159 13.5 12 13.5c1.84 0 3.333-1.455 3.333-3.25S13.841 7 12 7Z" clip-rule="evenodd"/>
+          </svg>
+
+          <!-- Affichage des détails utilisateur ou mode édition -->
+          <div *ngIf="!isEditing; else editMode">
+            <div class="text-center space-y-2 mt-5">
+              <p class="text-lg text-gray-700 dark:text-gray-300 p-3 flex items-center justify-center space-x-2">
+                <i class="material-icons text-blue-800">person</i>
+                <span class="font-bold mr-2">Username:</span> <span>{{ userInfo?.username }}</span>
+              </p>
+              <p class="text-lg text-gray-700 dark:text-gray-300 p-3 flex items-center justify-center space-x-2">
+                <i class="material-icons text-blue-800">email</i>
+                <span class="font-bold mr-2">Email:</span> <span>{{ userInfo?.email }}</span>
+              </p>
+              <p class="text-lg text-gray-700 dark:text-gray-300 p-3 flex items-center justify-center space-x-2">
+                <i class="material-icons text-blue-800">work</i>
+                <span class="font-bold mr-2">Role:</span> <span>{{ getRoleTitle() }}</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Mode édition -->
+          <ng-template #editMode>
+            <form [formGroup]="edituserInfo" (submit)="updateProfile()">
+              <div class="text-center mt-5">
+                <div class="flex flex-col space-y-4 p-3">
+                  
+                  <!-- Username Field -->
+                  <div class="space-x-4">
+                    <div class="d-flex gap-2 items-center ml-4">
+                      <i class="material-icons text-blue-800">person</i>
+                      <label class="font-bold text-gray-700 dark:text-gray-300">Username:</label>
+                    </div>
+                    <div class="flex-1">
+                      <input 
+                        type="text" 
+                        formControlName="username"
+                        class="bg-gray-200 border border-gray-300 text-gray-500 text-sm rounded-lg shadow-sm cursor-not-allowed block w-full p-3 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-400"
+                        aria-disabled="true"
+                      />
+                    </div>
+                    
+                    
+                  </div>
+          
+                  <!-- Email Field -->
+                  <div class="space-x-4">
+                    <div class="d-flex gap-2 items-center ml-4">
+                      <i class="material-icons text-blue-800">email</i>
+                      <label class="font-bold text-gray-700 dark:text-gray-300">Email:</label>
+                    </div>
+                    <div class="flex-1">
+                      <input type="email" formControlName="email" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" />
+                    </div>
+                  </div>
+          
+                 <!-- Old Password Field -->
+
+        <!-- Old Password Field -->
+<div class="space-x-4">
+  <div class="d-flex gap-2 items-center ml-4">
+    <i class="material-icons text-blue-800">lock</i>
+    <label class="font-bold text-gray-700 dark:text-gray-300">Old Password:</label>
+  </div>
+  <div class="flex-1 relative">
+    <input 
+      [type]="showOldPassword ? 'text' : 'password'" 
+      formControlName="oldPassword" 
+      class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-3 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" 
+    />
+          <!-- Icone eye avec classe conditionnelle -->
+          <span 
+          class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" 
+          [ngClass]="{'mb-4': edituserInfo.get('oldPassword')?.touched && edituserInfo.get('oldPassword')?.invalid}"
+          (click)="togglePasswordVisibility('oldPassword')"
+        >
+          <i class="material-icons text-gray-600">{{ showOldPassword ? 'visibility_off' : 'visibility' }}</i>
+        </span>
+        <!-- Message d'alerte si oldPassword est requis et non fourni -->
+        <div *ngIf="edituserInfo.get('oldPassword')?.touched && edituserInfo.get('oldPassword')?.invalid">
+          <p class="text-red-600 text-sm mt-1 text-shadow">
+            Old Password is required
+          </p>
+        </div>
+  </div>
+</div>
+
+<!-- New Password Field -->
+<div class="space-x-4">
+  <div class="d-flex gap-2 items-center ml-4">
+    <i class="material-icons text-blue-800">lock_open</i>
+    <label class="font-bold text-gray-700 dark:text-gray-300">New Password:</label>
+  </div>
+  <div class="flex-1 relative">
+    <input 
+      [type]="showNewPassword ? 'text' : 'password'" 
+      formControlName="newPassword" 
+      class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-3 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" 
+    />
+    <!-- Icone eye -->
+    <span class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" (click)="togglePasswordVisibility('newPassword')">
+      <i class="material-icons text-gray-600">{{ showNewPassword ? 'visibility_off' : 'visibility' }}</i>
+    </span>
+  </div>
+</div>
+
+
+
+          
+                  <!-- Save Changes Button -->
+                  <button type="submit" class="border border-transparent bg-gradient-to-r from-cyan-800 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-bold text-white px-4 py-2 rounded hover:bg-blue-600 ml-4">
+                    Save Changes
+                  </button>
+                </div>
+              </div>
+            </form>
+          </ng-template>
+          
+          
+        </div>
+      </div>
     </div>
   </div>
-  
+
+  <div class="profil-footer mt-2">
+    <app-footer></app-footer>
+  </div>
+</div>

@@ -47,6 +47,8 @@ export class TasksComponent implements OnInit  {
   Comments: any[] = [];
   addCommentForm!: FormGroup;
   editingCommentId: number | null = null;
+  isAdmin: boolean = false;
+  currentusername: string = '';
   constructor(private route: ActivatedRoute,
     private taskService:TaskService,
     private fb: FormBuilder,
@@ -59,13 +61,13 @@ export class TasksComponent implements OnInit  {
     this.sprintId = id !== null ? +id : 0;
     this.addTaskForm = this.fb.group({
       taskName: ['', [Validators.required]],
-      taskDescription: ['', [Validators.required]],
+      taskDescription: [''],
       startDate: ['', [Validators.required]],
       endDate: ['', [Validators.required]],
       sprintId: [this.sprintId],
     });
     this.EditTaskForm = this.fb.group({
-      taskName: [''],
+      taskName: ['', [Validators.required]],
       taskDescription: [''],
       startDate: [''],
       endDate: ['']
@@ -78,8 +80,38 @@ export class TasksComponent implements OnInit  {
       content: [''],
     }); 
     this.getAllTasks();
-    
-   
+    this.GetAdmin();
+    this.GetUserName();
+  }
+
+getUserRole(){
+  const accessToken = localStorage.getItem('accessToken'); 
+  if (!accessToken) {
+    return null; 
+  }
+
+  try {
+    const decodedToken: any = jwtDecode(accessToken);
+    return decodedToken.role || null; 
+  } catch (error) {
+    console.error('Error decoding JWT:', error);
+    return null;
+  }
+}
+
+GetAdmin(): void {
+  let role=this.getUserRole();
+  console.log('role',role);
+    if (role === 'ROLE_ADMIN') {
+      this.isAdmin = true;
+    } else {
+      this.isAdmin = false;
+    }
+}
+
+GetUserName(){
+  let userName = this.getUserName();
+   this.currentusername=userName;
 }
   
   drop(event: CdkDragDrop<any[]>) {
@@ -190,9 +222,10 @@ export class TasksComponent implements OnInit  {
     });
   }
   
-
-
+  get f() { return this.addTaskForm.controls; }
+  get f2() { return this.EditTaskForm.controls; }
   addTask() {
+    this.addTaskForm.markAllAsTouched();
     if (this.addTaskForm.valid) {
       console.log("Form values before sending:", this.addTaskForm.value);
   
@@ -203,18 +236,40 @@ export class TasksComponent implements OnInit  {
          this.closeModal();
         },
         error: (error) => {
-          console.error('Error adding task:', error);
-          this._toastr.error('Error adding task', 'Error');
-        }
+          // Vérifier et afficher les messages d'erreur spécifiques
+          let errorMessage: string;
+
+          // Accéder au message d'erreur depuis l'objet d'erreur
+          const errorResponse = error.error as { message: string };
+
+          // Assigner les messages d'erreur en fonction des codes d'erreur ou des messages
+          switch (errorResponse?.message) {
+              
+              case "Start date and end date must be provided":
+                  errorMessage = 'Start date and end date must be provided';
+                  break;
+              case "End date must be after start date":
+                  errorMessage = 'End date must be after start date';
+                  break;
+              case "Start date must be today or in the future":
+                  errorMessage = 'Start date must be today or in the future';
+                  break;
+              default:
+                  errorMessage = 'An unknown error occurred';
+                  break;
+          }
+
+          // Afficher le message d'erreur
+          this._toastr.error(errorMessage, 'Error');
+      }
       });
-    } else {
-      console.error('Task form is invalid');
-      this._toastr.error('Please fill out all required fields', 'Error');
-    }
+    } 
   }
 
   //update sprint function
   updateTask(id: number) {
+    this.EditTaskForm.markAllAsTouched();
+
     if (this.EditTaskForm.valid) {
         console.log("Form values before sending:", this.EditTaskForm.value);
 
@@ -226,9 +281,11 @@ export class TasksComponent implements OnInit  {
                this.closeModalEdit();
             },
             error: (error) => {
+              if(error.message="End date must be after start date."){
+                this._toastr.error('End date must be after start date.', 'Error');}else{
                 console.error('Error updating task:', error);
                 this._toastr.error('Error updating task', 'Error');
-            }
+                }}
         });
     } else {
         console.error('Task form is invalid');

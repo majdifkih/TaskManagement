@@ -1,0 +1,569 @@
+<div class="task-container">
+  
+    <div class="task-header border-b border-gray-300 dark:border-gray-700">
+      <app-header></app-header>
+    </div>
+  
+    <div class="task-main-content">
+  
+      <div class="main-content">
+          <div class="flex-1 text-center">
+              <div class="inline-flex items-center gap-2">
+                  <h1 class="text-4xl font-bold text-gray-800 dark:text-white p-2" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">My Tasks</h1>
+              </div>
+          </div>
+          
+      
+      
+  
+      <div class="row">
+        <div class="col-lg-10 mx-auto" cdkDropListGroup>
+          <div class="board flex space-x-4">
+            <!-- To Do Column -->
+  <div  class="example-container w-full">
+    
+    <div
+      cdkDropList
+      id="cdk-drop-list-to-do"
+      [cdkDropListData]="ToDoTasks"
+      [cdkDropListConnectedTo]="['cdk-drop-list-doing', 'cdk-drop-list-done']"
+      class="example-list p-2 bg-white  w-full p-3 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 d-flex flex-column"
+      (cdkDropListDropped)="drop($event)">
+      <div class=" bg-gray-100 rounded-lg mb-3"><h2 class="text-2xl font-semibold mb-2 text-center">To Do</h2></div>
+      <div *ngIf="ToDoTasks.length > 0; else noTasksToDo">
+       <!-- <div class="bg-gray-700"></div> -->
+      <div *ngFor="let itemToDo of ToDoTasks; let i=index"   class="example-box p-2 mb-2 bg-white border border-gray-300 rounded shadow-sm cursor-pointer" cdkDrag [cdkDragData]="itemToDo">
+        <h2>
+          <button (click)="toggleAccordion(itemToDo.taskId)" type="button" class="flex items-center justify-between w-full p-2 font-xs text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3" [attr.aria-expanded]="isAccordionOpen(itemToDo.taskId)" [attr.aria-controls]="'accordion-collapse-body-' + itemToDo.taskId">
+            <span class="text-lg font-bold d-flex gap-2 items-center" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">{{ itemToDo.taskName }} <p class="text-sm">({{ ProjectName }})</p></span>
+            <svg [ngClass]="{'rotate-180': isAccordionOpen(itemToDo.taskId)}" class="w-4 h-4 transform transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5L5 1 1 5" />
+            </svg>
+          </button>
+        </h2>
+        <div *ngIf="isAccordionOpen(itemToDo.taskId)" id="accordion-collapse-body-{{itemToDo.taskId}}" class="accordion-content" >
+          <div class="flex justify-between border-t border-gray-200 mb-2">
+            <div class="text-gray-600 dark:text-gray-400 space-y-2 ">
+            </div>
+          </div>
+  
+            <div class="flex justify-between mb-2">
+            <div class="flex gap-2 items-center">
+              <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" d="M5 5a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1 2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a2 2 0 0 1 2-2ZM3 19v-7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Zm6.01-6a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm-10 4a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z" clip-rule="evenodd"/>
+              </svg>
+              <p><strong>Deadline:</strong> {{itemToDo.endDate}}</p>
+            </div>
+  
+            
+    
+  
+          </div>
+          <form [formGroup]="addCommentForm" (submit)="addComment(itemToDo.taskId)">
+            <div class="d-flex gap-2">
+          <div class="flex gap-2 items-center">
+            
+              <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+              <path fill-rule="evenodd" d="M3.559 4.544c.355-.35.834-.544 1.33-.544H19.11c.496 0 .975.194 1.33.544.356.35.559.829.559 1.331v9.25c0 .502-.203.981-.559 1.331-.355.35-.834.544-1.33.544H15.5l-2.7 3.6a1 1 0 0 1-1.6 0L8.5 17H4.889c-.496 0-.975-.194-1.33-.544A1.868 1.868 0 0 1 3 15.125v-9.25c0-.502.203-.981.559-1.331ZM7.556 7.5a1 1 0 1 0 0 2h8a1 1 0 0 0 0-2h-8Zm0 3.5a1 1 0 1 0 0 2H12a1 1 0 1 0 0-2H7.556Z" clip-rule="evenodd"/>
+              </svg>
+  
+              <p> <textarea type="text" formControlName="content" name="content" class="border-none rounded-md bg-gray-200 shadow-md" placeholder="Enter comment"></textarea>
+              </p>
+            </div>
+            <button class="commentbtn w-20 h-8 bg-blue-800 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg ">
+              Comment
+            </button>
+            </div>
+          </form>
+          <div class="flex gap-5 justify-end mt-2 font-xs">
+            <button class="flex items-center gap-2 text-gray-500 hover:text-gray-700 mr-2 
+            transition-transform duration-300 transform hover:scale-110" (click)="onModalDetail(itemToDo)">
+  <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 6h8M6 10h12M8 14h8M6 18h12"/>
+            </svg>
+  
+            <span>Details</span>
+            </button>
+          <button class="flex items-center gap-2 text-green-500 hover:text-green-700 mr-2 
+            transition-transform duration-300 transform hover:scale-110" (click)="onModalEdit(itemToDo)">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+             <path fill-rule="evenodd" d="M11.32 6.176H5c-1.105 0-2 .949-2 2.118v10.588C3 20.052 3.895 21 5 21h11c1.105 0 2-.948 2-2.118v-7.75l-3.914 4.144A2.46 2.46 0 0 1 12.81 16l-2.681.568c-1.75.37-3.292-1.263-2.942-3.115l.536-2.839c.097-.512.335-.983.684-1.352l2.914-3.086Z" clip-rule="evenodd" />
+             <path fill-rule="evenodd" d="M19.846 4.318a2.148 2.148 0 0 0-.437-.692 2.014 2.014 0 0 0-.654-.463 1.92 1.92 0 0 0-1.544 0 2.014 2.014 0 0 0-.654.463l-.546.578 2.852 3.02.546-.579a2.14 2.14 0 0 0 .437-.692 2.244 2.244 0 0 0 0-1.635ZM17.45 8.721 14.597 5.7 9.82 10.76a.54.54 0 0 0-.137.27l-.536 2.84c-.07.37.239.696.588.622l2.682-.567a.492.492 0 0 0 .255-.145l4.778-5.06Z" clip-rule="evenodd" />
+           </svg>
+  <span>Edit</span>
+  </button>
+  <button class="flex items-center gap-2 p-2 text-red-500 hover:text-red-700 mr-2 
+            transition-transform duration-300 transform hover:scale-110" (click)="confirmationAlert(itemToDo.taskId)">
+  <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8M4 7h1M20 7h1m-2 0V4a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3h16ZM4 7h16v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Z"/>
+  </svg>
+  <span>Delete</span>
+  </button>
+          </div>
+        </div>
+      </div>
+    
+    </div>
+      <ng-template #noTasksToDo>
+        <p class="text-center text-gray-500 p-5 bg-gray-50 border rounded-lg">No Tasks To Do</p>
+      </ng-template>
+    
+    </div>
+  </div>
+  
+            <!-- Doing Column -->
+            <div class="example-container w-full">
+              
+              <div
+              class="max-w-sm w-full p-3  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex flex-col"
+                cdkDropList
+                id="cdk-drop-list-doing"
+                [cdkDropListData]="DoingTasks"
+                [cdkDropListConnectedTo]="['cdk-drop-list-to-do', 'cdk-drop-list-done']"
+                class=" example-list p-2 bg-gray-100 rounded-lg max-w-sm w-full p-3  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex flex-col"
+                (cdkDropListDropped)="drop($event)">
+                <div class=" bg-gray-100 rounded-lg mb-3"><h2 class="text-2xl font-semibold mb-2 text-center">Doing</h2></div>
+                <div *ngIf="DoingTasks.length > 0; else noTasksDoing">
+                <div *ngFor="let itemDoing of DoingTasks; let i=index" class="example-box p-2 mb-2 bg-white cursor-pointer border border-gray-300 rounded shadow-sm" cdkDrag [cdkDragData]="itemDoing">
+                  <h2>
+                    <button (click)="toggleAccordion(itemDoing.taskId)" type="button" class="flex items-center justify-between w-full p-2 font-xs text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3" [attr.aria-expanded]="isAccordionOpen(itemDoing.taskId)" [attr.aria-controls]="'accordion-collapse-body-' + itemDoing.taskId">
+                        <span class="text-lg font-bold d-flex gap-2 items-center" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">{{ itemDoing.taskName }} <p class="text-sm">({{ ProjectName }})</p></span>
+                        <svg [ngClass]="{'rotate-180': isAccordionOpen(itemDoing.taskId)}" class="w-4 h-4 transform transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5L5 1 1 5" />
+                      </svg>
+                    </button>
+                  </h2>
+                  <div *ngIf="isAccordionOpen(itemDoing.taskId)" id="accordion-collapse-body-{{itemDoing.taskId}}" >
+                    <div class="flex justify-between border-t border-gray-200 mb-2">
+                      <div class="text-gray-600 dark:text-gray-400 space-y-2 ">
+                      </div>
+                    </div>
+            
+                      <div class="flex justify-between mb-2">
+                      <div class="flex gap-2 items-center">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                          <path fill-rule="evenodd" d="M5 5a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1 2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a2 2 0 0 1 2-2ZM3 19v-7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Zm6.01-6a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm-10 4a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z" clip-rule="evenodd"/>
+                        </svg>
+                        <p><strong>Deadline:</strong> {{itemDoing.endDate}}</p>
+                      </div>
+            
+                      
+              
+              
+            
+                    </div>
+                    <form [formGroup]="addCommentForm" (submit)="addComment(itemDoing.taskId)">
+                      <div class="d-flex gap-2">
+                    <div class="flex gap-2 items-center">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M3.559 4.544c.355-.35.834-.544 1.33-.544H19.11c.496 0 .975.194 1.33.544.356.35.559.829.559 1.331v9.25c0 .502-.203.981-.559 1.331-.355.35-.834.544-1.33.544H15.5l-2.7 3.6a1 1 0 0 1-1.6 0L8.5 17H4.889c-.496 0-.975-.194-1.33-.544A1.868 1.868 0 0 1 3 15.125v-9.25c0-.502.203-.981.559-1.331ZM7.556 7.5a1 1 0 1 0 0 2h8a1 1 0 0 0 0-2h-8Zm0 3.5a1 1 0 1 0 0 2H12a1 1 0 1 0 0-2H7.556Z" clip-rule="evenodd"/>
+                        </svg>
+            
+                        <p> <textarea type="text" formControlName="content" name="content" class="border-none rounded-md bg-gray-200 shadow-md" placeholder="Enter comment"></textarea>
+                        </p>
+                      </div>
+                      <button class="commentbtn w-20 h-8 bg-blue-800 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg ">
+                        Comment</button>
+                      </div>
+                    </form>
+                    <div class="flex gap-5 justify-end mt-2 font-xs">
+                      <button class="flex items-center gap-2 text-gray-500 hover:text-gray-700 mr-2 
+                      transition-transform duration-300 transform hover:scale-110" (click)="onModalDetail(itemDoing)">
+         <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 6h8M6 10h12M8 14h8M6 18h12"/>
+         </svg>
+  
+         <span>Details</span>
+       </button>
+       <button class="flex items-center gap-2 text-green-500 hover:text-green-700 mr-2 
+                      transition-transform duration-300 transform hover:scale-110" (click)="onModalEdit(itemDoing)">
+                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                       <path fill-rule="evenodd" d="M11.32 6.176H5c-1.105 0-2 .949-2 2.118v10.588C3 20.052 3.895 21 5 21h11c1.105 0 2-.948 2-2.118v-7.75l-3.914 4.144A2.46 2.46 0 0 1 12.81 16l-2.681.568c-1.75.37-3.292-1.263-2.942-3.115l.536-2.839c.097-.512.335-.983.684-1.352l2.914-3.086Z" clip-rule="evenodd" />
+                       <path fill-rule="evenodd" d="M19.846 4.318a2.148 2.148 0 0 0-.437-.692 2.014 2.014 0 0 0-.654-.463 1.92 1.92 0 0 0-1.544 0 2.014 2.014 0 0 0-.654.463l-.546.578 2.852 3.02.546-.579a2.14 2.14 0 0 0 .437-.692 2.244 2.244 0 0 0 0-1.635ZM17.45 8.721 14.597 5.7 9.82 10.76a.54.54 0 0 0-.137.27l-.536 2.84c-.07.37.239.696.588.622l2.682-.567a.492.492 0 0 0 .255-.145l4.778-5.06Z" clip-rule="evenodd" />
+                     </svg>
+         <span>Edit</span>
+       </button>
+       <button class="flex items-center gap-2 p-2 text-red-500 hover:text-red-700 mr-2 
+                      transition-transform duration-300 transform hover:scale-110" (click)="confirmationAlert(itemDoing.taskId)">
+         <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8M4 7h1M20 7h1m-2 0V4a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3h16ZM4 7h16v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Z"/>
+         </svg>
+         <span>Delete</span>
+       </button>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+              <ng-template #noTasksDoing>
+                <p class="text-center text-gray-500 p-5 bg-gray-50 border rounded-lg">No Tasks in Progress</p>
+              </ng-template>
+              </div>
+            </div>
+            
+      
+           <!-- Done Column -->
+  <div  class="example-container w-full">
+    
+    <div
+      cdkDropList
+      class=" example-list p-2 bg-gray-100 rounded-lg max-w-sm w-full p-3  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex flex-col"
+      id="cdk-drop-list-done"
+      [cdkDropListData]="DoneTasks"
+      [cdkDropListConnectedTo]="['cdk-drop-list-to-do', 'cdk-drop-list-doing']"
+      (cdkDropListDropped)="drop($event)">
+      <div class=" bg-gray-100 rounded-lg mb-3"><h2 class="text-2xl font-semibold mb-2 text-center">Done</h2></div>
+      <div *ngIf="DoneTasks.length > 0; else noTasksDone">
+      <div *ngFor="let itemDone of DoneTasks; let i=index" class="example-box p-2 mb-2 bg-white cursor-pointer border border-gray-300 rounded shadow-sm" cdkDrag [cdkDragData]="itemDone">
+        <h2>
+          <button (click)="toggleAccordion(itemDone.taskId)" type="button" class="flex items-center justify-between w-full p-2 font-xs text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3" [attr.aria-expanded]="isAccordionOpen(itemDone.taskId)" [attr.aria-controls]="'accordion-collapse-body-' + itemDone.taskId">
+            <span class="text-lg font-bold d-flex gap-2 items-center" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">{{ itemDone.taskName }} <p class="text-sm">({{ ProjectName }})</p></span>
+            <svg [ngClass]="{'rotate-180': isAccordionOpen(itemDone.taskId)}" class="w-4 h-4 transform transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5L5 1 1 5" />
+            </svg>
+          </button>
+        </h2>
+        <div *ngIf="isAccordionOpen(itemDone.taskId)" id="accordion-collapse-body-{{itemDone.taskId}}" >
+          <div class="flex justify-between border-t border-gray-200 mb-2">
+            <div class="text-gray-600 dark:text-gray-400 space-y-2 ">
+            </div>
+          </div>
+  
+            <div class="flex justify-between mb-2">
+            <div class="flex gap-2 items-center">
+              <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" d="M5 5a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1 2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a2 2 0 0 1 2-2ZM3 19v-7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Zm6.01-6a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm-10 4a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z" clip-rule="evenodd"/>
+              </svg>
+              <p><strong>Deadline:</strong> {{itemDone.endDate}}</p>
+            </div>
+  
+  
+          </div>
+          <form [formGroup]="addCommentForm" (submit)="addComment(itemDone.taskId)">
+            <div class="d-flex gap-2">
+            
+          <div class="flex gap-2 items-center">
+              <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+              <path fill-rule="evenodd" d="M3.559 4.544c.355-.35.834-.544 1.33-.544H19.11c.496 0 .975.194 1.33.544.356.35.559.829.559 1.331v9.25c0 .502-.203.981-.559 1.331-.355.35-.834.544-1.33.544H15.5l-2.7 3.6a1 1 0 0 1-1.6 0L8.5 17H4.889c-.496 0-.975-.194-1.33-.544A1.868 1.868 0 0 1 3 15.125v-9.25c0-.502.203-.981.559-1.331ZM7.556 7.5a1 1 0 1 0 0 2h8a1 1 0 0 0 0-2h-8Zm0 3.5a1 1 0 1 0 0 2H12a1 1 0 1 0 0-2H7.556Z" clip-rule="evenodd"/>
+              </svg>
+  
+              <p> <textarea type="text" formControlName="content" name="content" class="border-none rounded-md bg-gray-200 shadow-md" placeholder="Enter comment"></textarea>
+              </p>
+            </div>
+            <button class="commentbtn w-20 h-8 bg-blue-800 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg ">
+              Comment
+            </button>
+            </div>
+          </form>
+          <div class="flex gap-5 justify-end mt-2 font-xs">
+  
+            <button class="flex items-center gap-2 text-gray-500 hover:text-gray-700 mr-2 
+                           transition-transform duration-300 transform hover:scale-110" (click)="onModalDetail(itemDone)">
+              <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 6h8M6 10h12M8 14h8M6 18h12"/>
+              </svg>
+  
+              <span>Details</span>
+            </button>
+            <button class="flex items-center gap-2 text-green-500 hover:text-green-700 mr-2 
+                           transition-transform duration-300 transform hover:scale-110" (click)="onModalEdit(itemDone)">
+                           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" d="M11.32 6.176H5c-1.105 0-2 .949-2 2.118v10.588C3 20.052 3.895 21 5 21h11c1.105 0 2-.948 2-2.118v-7.75l-3.914 4.144A2.46 2.46 0 0 1 12.81 16l-2.681.568c-1.75.37-3.292-1.263-2.942-3.115l.536-2.839c.097-.512.335-.983.684-1.352l2.914-3.086Z" clip-rule="evenodd" />
+                            <path fill-rule="evenodd" d="M19.846 4.318a2.148 2.148 0 0 0-.437-.692 2.014 2.014 0 0 0-.654-.463 1.92 1.92 0 0 0-1.544 0 2.014 2.014 0 0 0-.654.463l-.546.578 2.852 3.02.546-.579a2.14 2.14 0 0 0 .437-.692 2.244 2.244 0 0 0 0-1.635ZM17.45 8.721 14.597 5.7 9.82 10.76a.54.54 0 0 0-.137.27l-.536 2.84c-.07.37.239.696.588.622l2.682-.567a.492.492 0 0 0 .255-.145l4.778-5.06Z" clip-rule="evenodd" />
+                          </svg>
+              <span>Edit</span>
+            </button>
+            <button class="flex items-center gap-2 p-2 text-red-500 hover:text-red-700 mr-2 
+                           transition-transform duration-300 transform hover:scale-110" (click)="confirmationAlert(itemDone.taskId)">
+              <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8M4 7h1M20 7h1m-2 0V4a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3h16ZM4 7h16v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Z"/>
+              </svg>
+              <span>Delete</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #noTasksDone>
+      <p class="text-center text-gray-500 p-5 bg-gray-50 border rounded-lg">No Done Tasks</p>
+    </ng-template> 
+    </div>
+  </div>
+  
+  </div>    
+        </div>
+      </div>
+      
+      
+      
+    </div>
+  
+  
+    <div class="task-footer mt-2">
+      <app-footer></app-footer>
+    </div>
+  </div>
+
+  
+  
+  
+  <div *ngIf="showAlert" class="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-smoke-light bg-gray-900 bg-opacity-50">
+    <div class="bg-white p-4 rounded-lg shadow-lg w-full max-w-md mx-auto">
+      <div class="flex flex-col items-center text-center">
+        <div class="inline-block p-4 bg-yellow-50 rounded-full">
+          <svg class="w-12 h-12 fill-current text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0V0z" fill="none"/>
+            <path d="M12 5.99L19.53 19H4.47L12 5.99M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"/>
+          </svg>
+        </div>
+        <h2 class="mt-2 font-semibold text-gray-800">Confirm Delete</h2>
+        <p class="mt-2 text-sm text-gray-600 leading-relaxed">Are you sure you want to delete this task?</p>
+      </div>
+  
+      <div class="flex items-center mt-3">
+        <button (click)="closeAlert()" class="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium rounded-md">
+          Cancel
+        </button>
+        <button (click)="confirmDelete()" class="flex-1 px-4 py-2 ml-2 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-md">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  <!---Modal Edit-->
+  <div *ngIf="showEdit" class="w-full h-full bg-gray-800 bg-opacity-90 top-0 overflow-y-auto overflow-x-hidden fixed sticky-0 z-50" id="chec-div">
+    <div class="bg-white h-screen overflow-y-auto p-4 absolute right-0 w-80 shadow-lg rounded-lg">
+        <form class="mt-6" (submit)="updateTask(currentTaskId)" [formGroup]="EditTaskForm">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between">
+                <h3 class="text-2xl font-bold text-gray-700 dark:text-white pl-3" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">
+                  Edit Task
+                </h3>
+                <button role="button" aria-label="close modal" class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 rounded-md cursor-pointer transition-transform transform hover:scale-110" (click)="closeModalEdit()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18" stroke="#4B5563" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M6 6L18 18" stroke="#4B5563" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+  
+            <!-- Modal body -->
+            <div class="mt-10 space-y-4">
+                <div>
+                    <label for="taskname" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-cyan-400">Task Name</label>
+                    <input type="text" formControlName="taskName" name="taskName" id="taskname" class="bg-gray-50 border border-cyan-300 text-gray-900 text-sm rounded-lg shadow-md focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-700 dark:border-cyan-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-cyan-500 dark:focus:border-cyan-500" placeholder="Enter Task Name" />
+                </div>
+                <div>
+                    <label for="description" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-cyan-400">Description</label>
+                    <textarea id="description" formControlName="taskDescription" name="taskDescription" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-cyan-300 shadow-md focus:ring-cyan-500 focus:border-cyan-500 dark:bg-gray-700 dark:border-cyan-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-cyan-500 dark:focus:border-cyan-500" placeholder="Write task description..."></textarea>
+                </div>
+            
+                <div class="relative mb-6">
+                  <label for="startDate" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">Start Date</label>
+      
+                  <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none mt-3">
+                      <svg class="w-4 h-4 text-gray-500 dark:text-gray-400 mt-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                      </svg>
+                  </div>
+                  <input type="date" formControlName="startDate" id="startDate" name="startDate" class="form-control-date text-center bg-gray-50 border border-cyan-300 text-gray-700 text-sm rounded-lg shadow-md focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-cyan-500 dark:placeholder-gray-400 dark:text-white" (click)="showDatePicker($event)">
+                </div>
+              
+  
+                <div class="relative mb-6">
+                  <label for="endDate" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white block mb-2 text-sm">End Date</label>
+      
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400 mt-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                        </svg>
+                    </div>
+                    <input type="date" formControlName="endDate" id="endDate" name="endDate" class="form-control-date text-center bg-gray-50 border border-cyan-300 text-gray-700 text-sm rounded-lg shadow-md focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-cyan-500 dark:placeholder-gray-400 dark:text-white" (click)="showDatePicker($event)">
+                </div>
+  
+          
+                <button type="submit" class="w-full font-bold mt-4 text-white inline-flex items-center justify-center space-x-1 py-2 border border-transparent bg-gradient-to-r from-cyan-800 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-base px-5 py-2.5 text-center me-2 mb-2">
+                  <svg class="w-3.5 h-3.5 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M18 2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2ZM2 18V7h6.7l.4-.409A4.309 4.309 0 0 1 15.753 7H18v11H2Z"/>
+                    <path d="M8.139 10.411 5.289 13.3A1 1 0 0 0 5 14v2a1 1 0 0 0 1 1h2a1 1 0 0 0 .7-.288l2.886-2.851-3.447-3.45ZM14 8a2.463 2.463 0 0 0-3.484 0l-.971.983 3.468 3.468.987-.971A2.463 2.463 0 0 0 14 8Z"/>
+                </svg>
+                  Edit Task
+                </button>
+            </div> 
+        </form> 
+    </div>
+  </div>
+  
+  
+  
+  <!---Modal view Details-->
+  <div *ngIf="showdetail" class="w-full h-full bg-gray-800 bg-opacity-90 top-0 overflow-y-auto overflow-x-hidden fixed sticky-0 z-50" id="chec-div">
+    <div class="bg-white h-screen overflow-y-auto p-4 absolute right-0 w-96 shadow-lg rounded-lg">
+      <div class="flex items-center justify-between mt-6">
+        <p tabindex="0" class="focus:outline-none font-semibold leading-6 font-bold text-4xl text-gray-800"
+        style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">
+          {{ task?.taskName }}
+        </p>
+        <button role="button" aria-label="close modal" (click)="closeModalDetail()" 
+                class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 rounded-md cursor-pointer transition duration-200 ease-in-out transform hover:scale-110 hover:bg-gray-100 p-2">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 6L6 18" stroke="#4B5563" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6 6L18 18" stroke="#4B5563" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+  
+      <div class="mt-10">
+        <div class="flex items-center gap-2 mb-2">
+          <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M5 7h14M5 12h14M5 17h10"/>
+          </svg>
+          <label class="font-bold text-lg">Description</label>
+        </div>
+        <p class="text-gray-600">{{ task?.taskDescription }}</p>
+      </div>
+     
+      <div class="mb-6 mt-4 flex gap-3">
+        <div class="flex items-center gap-2 mb-2">
+          <i class="fa-solid fa-clock-rotate-left text-lg"></i>
+          <label class="font-bold text-lg">Status</label>
+      </div>
+        <p [ngClass]="{
+              'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300': task.status === 'To-Do',
+              'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300': task.status === 'Doing',
+              'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300': task.status === 'Done'
+            }"
+           class="text-sm font-medium px-3 py-2 rounded shadow-sm transition duration-200 ease-in-out">
+          {{ task?.status }}
+        </p>
+      </div>
+  
+      <div class="mb-6 flex gap-10">
+        <div>
+          <div class="flex gap-2 mb-2">
+            <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+              <path fill-rule="evenodd" d="M5 5a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1 2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a2 2 0 0 1 2-2ZM3 19v-7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Zm6.01-6a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm-10 4a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z" clip-rule="evenodd"/>
+            </svg>
+            <label class="font-bold text-lg">Start Date</label>
+          </div>
+          <p class="text-gray-600">{{ task?.startDate | date }}</p>
+        </div>
+  
+        <div class="ml-5">
+          <div class="flex gap-2 mb-2">
+            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+              <path fill-rule="evenodd" d="M12.512 8.72a2.46 2.46 0 0 1 3.479 0 2.461 2.461 0 0 1 0 3.479l-.004.005-1.094 1.08a.998.998 0 0 0-.194-.272l-3-3a1 1 0 0 0-.272-.193l1.085-1.1Zm-2.415 2.445L7.28 14.017a1 1 0 0 0-.289.702v2a1 1 0 0 0 1 1h2a1 1 0 0 0 .703-.288l2.851-2.816a.995.995 0 0 1-.26-.189l-3-3a.998.998 0 0 1-.19-.26Z" clip-rule="evenodd"/>
+              <path fill-rule="evenodd" d="M7 3a1 1 0 0 1 1 1v1h3V4a1 1 0 1 1 2 0v1h3V4a1 1 0 1 1 2 0v1h1a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h1V4a1 1 0 0 1 1-1Zm10.67 8H19v8H5v-8h3.855l.53-.537a1 1 0 0 1 .87-.285c.097.015.233.13.277.087.045-.043-.073-.18-.09-.276a1 1 0 0 1 .274-.873l1.09-1.104a3.46 3.46 0 0 1 4.892 0l.001.002A3.461 3.461 0 0 1 17.67 11Z" clip-rule="evenodd"/>
+            </svg>
+            <label class="font-bold text-lg">End Date</label>
+          </div>
+          <p class="text-gray-600">{{ task?.endDate | date }}</p>
+        </div>
+      </div>
+    
+  
+      <div class="mb-6">
+        <div class="flex gap-2 mb-4">
+          <label class="font-bold text-lg">Assigned users</label>
+        </div>
+        <div class="grid grid-cols-3 gap-4"> 
+          <div *ngFor="let assignusers of assignedUsers" class="flex items-center gap-2">
+            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+              <path fill-rule="evenodd" d="M12 20a7.966 7.966 0 0 1-5.002-1.756l.002.001v-.683c0-1.794 1.492-3.25 3.333-3.25h3.334c1.84 0 3.333 1.456 3.333 3.25v.683A7.966 7.966 0 0 1 12 20ZM2 12C2 6.477 6.477 2 12 2s10 4.477 10 10c0 5.5-4.44 9.963-9.932 10h-.138C6.438 21.962 2 17.5 2 12Zm10-5c-1.84 0-3.333 1.455-3.333 3.25S10.159 13.5 12 13.5c1.84 0 3.333-1.455 3.333-3.25S13.841 7 12 7Z" clip-rule="evenodd"/>
+            </svg>
+            
+            <p class="truncate text-gray-800 dark:text-gray-200 p-2 bg-gray-200 rounded-lg">{{ assignusers.username }}</p>
+          </div>
+        </div>
+      </div>
+  
+  
+      <div class="mt-4">
+        <div class="flex items-center gap-2 mb-2">
+          <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M5 7h14M5 12h14M5 17h10"/>
+          </svg>
+          <label class="font-bold text-lg">Comments</label>
+        </div>
+        <div *ngFor="let comment of Comments" class="border-b border-gray-200 p-1">
+          <div class="flex justify-between">
+            <div class="d-flex gap-2 text-xs items-center">
+              <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" d="M12 20a7.966 7.966 0 0 1-5.002-1.756l.002.001v-.683c0-1.794 1.492-3.25 3.333-3.25h3.334c1.84 0 3.333 1.456 3.333 3.25v.683A7.966 7.966 0 0 1 12 20ZM2 12C2 6.477 6.477 2 12 2s10 4.477 10 10c0 5.5-4.44 9.963-9.932 10h-.138C6.438 21.962 2 17.5 2 12Zm10-5c-1.84 0-3.333 1.455-3.333 3.25S10.159 13.5 12 13.5c1.84 0 3.333-1.455 3.333-3.25S13.841 7 12 7Z" clip-rule="evenodd"/>
+              </svg>
+              <p>{{comment.userComment}}</p>
+            </div>
+           
+  
+  
+            
+          </div>
+          <div *ngIf="comment.commentId === editingCommentId">
+            <input [(ngModel)]="comment.content" class="border rounded p-1" />
+            <button (click)="updateComment(comment.commentId)" class="bg-blue-500 text-white p-1 rounded ml-3">Edit</button>
+          </div>
+          <div *ngIf="comment.commentId !== editingCommentId" class="relative">
+            <p [ngClass]="{'bg-gray-50': comment.userComment !== currentusername, 'bg-blue-50': comment.userComment === currentusername}"
+            class="font-medium text-gray-700 p-3 border rounded-lg">
+           {{comment.content}}
+         </p>
+            <div *ngIf="comment.userComment === currentusername" class="absolute top-0 right-0">
+              <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                <mat-icon>
+                  <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M12 6h.01M12 12h.01M12 18h.01"/>
+                  </svg>
+                </mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <div class="bg-gray-200 p-0">
+                  <button mat-menu-item (click)="OnEditComment(comment)">
+                    <div class="d-flex gap-2 text-sm text-green-700 hover:text-green-600 mr-2 
+                                 transition-transform duration-300 transform hover:scale-110">
+                      <svg class="w-4 h-4 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M11.32 6.176H5c-1.105 0-2 .949-2 2.118v10.588C3 20.052 3.895 21 5 21h11c1.105 0 2-.948 2-2.118v-7.75l-3.914 4.144A2.46 2.46 0 0 1 12.81 16l-2.681.568c-1.75.37-3.292-1.263-2.942-3.115l.536-2.839c.097-.512.335-.983.684-1.352l2.914-3.086Z" clip-rule="evenodd"/>
+                        <path fill-rule="evenodd" d="M19.846 4.318a2.148 2.148 0 0 0-.437-.692 2.014 2.014 0 0 0-.654-.463 1.92 1.92 0 0 0-1.544 0 2.014 2.014 0 0 0-.654.463l-.546.578 2.852 3.02.546-.579a2.14 2.14 0 0 0 .437-.692 2.244 2.244 0 0 0 0-1.635ZM17.45 8.721 14.597 5.7 9.82 10.76a.54.54 0 0 0-.137.27l-.536 2.84c-.07.37.239.696.588.622l2.682-.567a.492.492 0 0 0 .255-.145l4.778-5.06Z" clip-rule="evenodd"/>
+                      </svg>
+                      <span>Edit</span>
+                    </div>
+                  </button>
+                  <button mat-menu-item class="text-xs flex items-center gap-2" (click)="deleteComment(comment)">
+                    <div class="d-flex gap-2 text-sm p-0 text-red-400 hover:text-red-400 mr-2 
+                                 transition-transform duration-300 transform hover:scale-110">
+                      <svg class="w-4 h-4 text-red-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M20 10H4v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8ZM9 13v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1Z" clip-rule="evenodd"/>
+                        <path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 1 1 0 4H4a2 2 0 0 1-2-2Z"/>
+                      </svg>
+                      <span>Delete</span>
+                    </div>
+                  </button>
+                </div>
+              </mat-menu>
+            </div>
+          </div>
+          
+        </div>
+        
+        <form [formGroup]="addCommentForm" (submit)="addComment(task.taskId)">
+          <textarea class="border-none rounded-md bg-gray-200 shadow-md w-full mt-2" formControlName="content" name="content" placeholder="Enter comment"></textarea>
+          <div class="flex justify-end mt-2"> 
+            <button class="w-20 h-8 bg-blue-800 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg">
+              Comment
+            </button>
+          </div>
+      </form>
+    </div>
+  </div>
+  </div>
+  
+  
+  
+  
+  
+  
+  
+  
+  

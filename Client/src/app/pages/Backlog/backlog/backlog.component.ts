@@ -10,6 +10,8 @@ import { ProjectService } from '../../../services/projects/project-servcie.servi
 import { SprintService } from '../../../services/sprint/sprint-service.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { jwtDecode } from 'jwt-decode';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-backlog',
@@ -39,6 +41,8 @@ export class BacklogComponent implements OnInit {
     status: ''
   };
 
+  isAdmin: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
      private projectService: ProjectService,
@@ -53,7 +57,7 @@ export class BacklogComponent implements OnInit {
     this.getAllSprints();
     this.addSprintForm = this.fb.group({
       sprintName: ['', [Validators.required]],
-      sprintDescription: ['', [Validators.required]],
+      sprintDescription: [''],
       startDate: ['', [Validators.required]],
       endDate: ['', [Validators.required]],
       projectId: [this.projectId],
@@ -64,8 +68,33 @@ export class BacklogComponent implements OnInit {
       startDate: [''],
       endDate: ['']
     });    
-    console.log('Sprints:', this.Sprints);
+   this.GetAdmin();
   }
+
+  getUserRole(){
+    const accessToken = localStorage.getItem('accessToken'); 
+    if (!accessToken) {
+      return null; 
+    }
+  
+    try {
+      const decodedToken: any = jwtDecode(accessToken);
+      return decodedToken.role || null; 
+    } catch (error) {
+      console.error('Error decoding JWT:', error);
+      return null;
+    }
+  }
+
+  GetAdmin(){
+    let role=this.getUserRole();
+    if (role === 'ROLE_ADMIN') {
+      this.isAdmin = true;
+    } else {
+      this.isAdmin = false;
+    }
+  }
+  
   
   
   getProjectDescription(): void {
@@ -97,50 +126,112 @@ export class BacklogComponent implements OnInit {
     this.Sprints.sort((a, b) => a.priority - b.priority);
   }
  
-  
+  get f() { return this.addSprintForm.controls; }
+  get f2() { return this.editSprintForm.controls; }
   addSprint() {
-    if (this.addSprintForm.valid) {
-      console.log("Form values before sending:", this.addSprintForm.value);
+    // Marquer tous les champs comme touchés pour afficher les erreurs de validation
+    this.addSprintForm.markAllAsTouched();
   
-      this.sprintService.addSprint(this.addSprintForm.value).subscribe({
-        next: (data: any) => {
-          this._toastr.success('Sprint added successfully', 'Success');
-          this.getAllSprints(); 
-          this.closeModal();
-        },
-        error: (error) => {
-          console.error('Error adding Sprint:', error);
-          this._toastr.error('Error adding Sprint', 'Error');
-        }
-      });
+    // Vérifier si le formulaire est valide
+    if (this.addSprintForm.valid) {
+        // Extraire les valeurs du formulaire
+        const sprintData = this.addSprintForm.value;
+        console.log("Form values before sending:", sprintData);
+  
+        // Appeler le service pour ajouter le sprint
+        this.sprintService.addSprint(sprintData).subscribe({
+            next: (data: any) => {
+                // Afficher un message de succès et rafraîchir les données
+                this._toastr.success('Sprint added successfully', 'Success');
+                this.getAllSprints(); 
+                this.closeModal();
+            },
+            error: (error) => {
+                // Vérifier et afficher les messages d'erreur spécifiques
+                let errorMessage: string;
+
+                // Accéder au message d'erreur depuis l'objet d'erreur
+                const errorResponse = error.error as { message: string };
+
+                // Assigner les messages d'erreur en fonction des codes d'erreur ou des messages
+                switch (errorResponse?.message) {
+                    case "SprintName already exists":
+                        errorMessage = 'Sprint Name already exists';
+                        break;
+                    case "Start date and end date must be provided":
+                        errorMessage = 'Start date and end date must be provided';
+                        break;
+                    case "End date must be after start date":
+                        errorMessage = 'End date must be after start date';
+                        break;
+                    case "Start date must be today or in the future":
+                        errorMessage = 'Start date must be today or in the future';
+                        break;
+                    default:
+                        errorMessage = 'An unknown error occurred';
+                        break;
+                }
+
+                // Afficher le message d'erreur
+                this._toastr.error(errorMessage, 'Error');
+            }
+        });
     } else {
-      console.error('Sprint form is invalid');
-      this._toastr.error('Please fill out all required fields', 'Error');
+        // Afficher un message d'erreur générique si le formulaire est invalide
+        this._toastr.error('Please fill in all required fields correctly', 'Error');
     }
-  }
+}
+
 
   //update sprint function
   updateSprint(id: number) {
-    if (this.editSprintForm.valid) {
-        console.log("Form values before sending:", this.editSprintForm.value);
+    this.editSprintForm.markAllAsTouched();
 
-        // Correction de l'URL en utilisant l'ID du sprint
-        this.sprintService.updateSprint(this.editSprintForm.value, id).subscribe({
+    const sprintUpdate: any = {};
+
+    if (this.editSprintForm.get('sprintName')?.dirty) {
+        const sprintName = this.editSprintForm.get('sprintName')?.value;
+        if (sprintName) {
+            sprintUpdate.sprintName = sprintName;
+        }
+    }
+    if (this.editSprintForm.get('startDate')?.dirty) {
+        sprintUpdate.startDate = this.editSprintForm.get('startDate')?.value;
+    }
+    if (this.editSprintForm.get('endDate')?.dirty) {
+        sprintUpdate.endDate = this.editSprintForm.get('endDate')?.value;
+    }
+    if (this.editSprintForm.get('sprintDescription')?.dirty) {
+        sprintUpdate.sprintDescription = this.editSprintForm.get('sprintDescription')?.value;
+    }
+
+    if (Object.keys(sprintUpdate).length > 0) {
+        console.log("Form values before sending:", sprintUpdate);
+
+        this.sprintService.updateSprint(sprintUpdate, id).subscribe({
             next: (data: any) => {
                 this._toastr.success('Sprint updated successfully', 'Success');
                 this.getAllSprints();
                 this.closeModalEdit();
             },
             error: (error) => {
-                console.error('Error updating sprint:', error);
-                this._toastr.error('Error updating sprint', 'Error');
+              if(error.message="SprintName already exists"){
+                this._toastr.error('Sprint Name already exists', 'Error');
+              }
+               
             }
         });
     } else {
-        console.error('Sprint form is invalid');
-        this._toastr.error('Please fill out all required fields', 'Error');
+        console.error('No changes detected');
+        this._toastr.error('No changes detected', 'Error');
     }
 }
+
+
+
+
+
+
 
   
   

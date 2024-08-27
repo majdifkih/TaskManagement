@@ -1,4 +1,14 @@
-
+.headmain {
+    /* background-color: #054772; */
+    color: #FFFFFF;
+    height: 80px;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  font-size:medium;
+  
+  }
 .fixed {
     position: fixed;
     top:80px; /* Ajustez selon la position désirée */
@@ -64,4 +74,19 @@
   }
   
   
+  .text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /* Ajustez les valeurs selon vos besoins */
+  }
   
+  /* Styles généraux pour les liens */
+ul li a {
+  display: inline-block;
+  transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
+}
+
+/* Animation lors du survol */
+ul li a:hover {
+  color: red; /* Couleur de texte lors du survol */
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6); /* Ombre du texte lors du survol */
+  transform: scale(1.1); /* Agrandissement du texte lors du survol */
+}

@@ -1,0 +1,129 @@
+.task-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .task-header-container {
+    width: 100%; /* Utilise la largeur complète */
+    z-index: 10; /* Assure que le header reste au-dessus des autres contenus */
+  }
+  
+  .task-header {
+    width: 100%;
+  }
+  
+  .main-content {
+    flex: 1;
+    overflow-x: hidden; 
+  }
+  
+  
+  .task-main-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-top: 2%;
+  }
+  
+  
+  
+  /* ===== Career ===== */
+  .career-form {
+    border-radius: 5px;
+    padding: 0 10px;
+    height: 2%;
+  }
+  
+  .career-form .form-control {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 0;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #3a3939;
+  }
+  .career-form .form-control-date {
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 0;
+    padding: 5px 10px;
+    color: #908888;
+    text-align: center;
+    width: 180%;
+  }
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+  }
+  input[type="date"] {
+    cursor: pointer; /* Changer le curseur pour indiquer qu'on peut cliquer */
+  }
+  .career-form .form-control::-webkit-input-placeholder {
+  
+    color: #908888;
+  }
+  
+  .career-form .custom-select {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 0;
+    padding: 5px 10px;
+    color: #908888;;
+    width: 100%;
+    border-radius: 5px;
+    text-align: left;
+    height: auto;
+    background-image: none;
+  }
+  
+  .career-form .custom-select:focus {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+  
+  .career-form .select-container {
+    position: relative;
+  }
+  .main-content {
+    padding: 1rem;
+  }
+  
+  
+  .example-box {
+    transition: transform 0.01s ease, background-color 0.3s ease;
+  }
+  
+  .example-list.cdk-drop-list-dragging .example-box {
+    transform: scale(1.05);
+    background-color: #f0f8ff; /* Couleur d'arrière-plan pour l'animation */
+  }
+  
+  
+  .rotate-180 {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
+  }
+  
+  .accordion-content {
+    transition: max-height 0.3s ease;
+  }
+  
+  .commentbtn{
+    margin-top: 10%;
+  }
+  
+  /* global styles.css or component-specific styles */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
