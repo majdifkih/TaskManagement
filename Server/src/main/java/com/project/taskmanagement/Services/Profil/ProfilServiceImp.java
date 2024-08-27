@@ -11,6 +11,7 @@ import com.project.taskmanagement.repository.Auth.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,28 +40,41 @@ public class ProfilServiceImp implements ProfilService{
     @Override
     public ResponseEntity<MessageResponse> updateProfile(ProfilDto profilDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        Optional<User> userOptional = userRepository.findByUsername(username);
+        String currentUsername = ((UserDetails) authentication.getPrincipal()).getUsername();
+        Optional<User> userOptional = userRepository.findByUsername(currentUsername);
 
         if (userOptional.isPresent()) {
             User existingUser = userOptional.get();
 
-            if (profilDto.getUsername() != null) {
-                existingUser.setUsername(profilDto.getUsername());
-            }
-            if (profilDto.getEmail() != null) {
-                existingUser.setEmail(profilDto.getEmail());
-            }
-            if (profilDto.getPassword() != null) {
-                existingUser.setPassword(encoder.encode(profilDto.getPassword()));
+            // Vérification de l'ancien mot de passe - il est obligatoire pour toute modification
+            if (profilDto.getOldPassword() == null || profilDto.getOldPassword().isEmpty() ||
+                    !encoder.matches(profilDto.getOldPassword(), existingUser.getPassword())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Old password is incorrect"));
             }
 
+            // Mise à jour du nom d'utilisateur si différent
+            if (profilDto.getUsername() != null && !profilDto.getUsername().equals(existingUser.getUsername())) {
+                existingUser.setUsername(profilDto.getUsername());
+            }
+
+            // Mise à jour de l'email si fourni
+            if (profilDto.getEmail() != null && !profilDto.getEmail().isEmpty()) {
+                existingUser.setEmail(profilDto.getEmail());
+            }
+
+            // Mise à jour du mot de passe si un nouveau mot de passe est fourni et non vide
+            if (profilDto.getNewPassword() != null && !profilDto.getNewPassword().isEmpty()) {
+                existingUser.setPassword(encoder.encode(profilDto.getNewPassword()));
+            }
+
+            // Sauvegarde des changements
             userRepository.save(existingUser);
-            return ResponseEntity.ok(new MessageResponse("Profil updated successfully!"));
+            return ResponseEntity.ok(new MessageResponse("Profile updated successfully!"));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("User not found"));
         }
     }
+
     @Override
     public ResponseEntity<ProfilDto> getUserDetail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -69,11 +83,14 @@ public class ProfilServiceImp implements ProfilService{
 
         if (user.isPresent()) {
             ProfilDto profilDto = profilMapper.toDto(user.get());
+            profilDto.setOldPassword(null);
+            profilDto.setNewPassword(null);
             return ResponseEntity.ok(profilDto);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+
 
 
 

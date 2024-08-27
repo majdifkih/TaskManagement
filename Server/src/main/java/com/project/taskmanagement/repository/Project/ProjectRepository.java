@@ -12,8 +12,9 @@ import java.util.List;
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> findByAdmin(User admin);
-    boolean existsByProjectNameAndAdminIdAndProjectId(String projectName, Long userId, Long id);
-   boolean existsByProjectNameAndAdminId(String projectName, Long userId);
+    boolean existsByProjectNameIgnoreCaseAndAdminIdAndProjectIdNot(String projectName, Long adminId, Long projectId);
+
+    boolean existsByProjectNameAndAdminId(String projectName, Long userId);
 
     @Query("SELECT DISTINCT p FROM Project p JOIN p.sprints s JOIN s.tasks t JOIN t.users u WHERE u.id = :userId")
     List<Project> findProjectsByUserId(@Param("userId") Long userId);

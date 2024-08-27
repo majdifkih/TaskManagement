@@ -33,7 +33,7 @@ public class SprintServiceImp implements SprintService {
     public ResponseEntity<MessageResponse> addSprint(SprintDto sprintDto) {
 
         if (sprintRepository.existsBySprintNameAndProject_ProjectId(sprintDto.getSprintName(), sprintDto.getProjectId())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("SprintName already exists in this project"));
+            return ResponseEntity.badRequest().body(new MessageResponse("SprintName already exists"));
         }
 
 
@@ -48,6 +48,7 @@ public class SprintServiceImp implements SprintService {
             Sprint sprint = sprintMapper.toEntity(sprintDto);
             sprint.setProject(project.get());
             sprint.setStatus("To-Do");
+            sprint.setSprintName(sprint.getSprintName().toUpperCase());
             sprintRepository.save(sprint);
             return ResponseEntity.ok(new MessageResponse("Sprint created successfully!"));
         } else {
@@ -59,41 +60,63 @@ public class SprintServiceImp implements SprintService {
     @Override
     public ResponseEntity<MessageResponse> updateSprint(Long sprintId, SprintDto sprintDto) {
 
-        if (sprintRepository.existsBySprintNameAndSprintId(sprintDto.getSprintName(), sprintId)) {
-            return ResponseEntity.badRequest().body(new MessageResponse("SprintName already exists"));
+        if (sprintDto.getSprintName() != null) {
+            String sprintNameUpper = sprintDto.getSprintName().toUpperCase();
+
+            // Vérifier si un sprint avec le même nom existe déjà, insensible à la casse
+            if (sprintRepository.existsBySprintNameIgnoreCaseAndProject_ProjectIdAndSprintIdNot(
+                    sprintNameUpper, sprintDto.getProjectId(), sprintId)) {
+                return ResponseEntity.badRequest().body(new MessageResponse("SprintName already exists"));
+            }
         }
 
-        String validationMessage = validateSprintDates(sprintDto);
-        if (validationMessage != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse(validationMessage));
+        // Trouver le sprint existant
+        Optional<Sprint> sprintOptional = sprintRepository.findById(sprintId);
+        if (!sprintOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Sprint not found"));
         }
-        Optional<Sprint> sprint = sprintRepository.findById(sprintId);
-        if (sprint.isPresent()) {
-            Sprint existingSprint = sprint.get();
-            sprintMapper.updateEntityFromDto(sprintDto, existingSprint);
 
-            sprintRepository.saveAndFlush(existingSprint);
-            return ResponseEntity.ok(new MessageResponse("Sprint updated successfully!"));
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new MessageResponse("Sprint not found"));
+        Sprint existingSprint = sprintOptional.get();
+
+        // Mise à jour du nom du sprint si nécessaire
+        if (sprintDto.getSprintName() != null) {
+            String sprintNameUpper = sprintDto.getSprintName().toUpperCase();
+            if (!existingSprint.getSprintName().equalsIgnoreCase(sprintNameUpper)) {
+                existingSprint.setSprintName(sprintNameUpper);
+            }
         }
+
+        // Mise à jour des autres champs
+        if (sprintDto.getStartDate() != null) {
+            existingSprint.setStartDate(sprintDto.getStartDate());
+        }
+        if (sprintDto.getEndDate() != null) {
+            existingSprint.setEndDate(sprintDto.getEndDate());
+        }
+        if (sprintDto.getSprintDescription() != null) {
+            existingSprint.setSprintDescription(sprintDto.getSprintDescription());
+        }
+
+        // Sauvegarder les modifications
+        sprintRepository.saveAndFlush(existingSprint);
+        return ResponseEntity.ok(new MessageResponse("Sprint updated successfully!"));
     }
+
     private String validateSprintDates(SprintDto sprintDto) {
         LocalDate startDate = sprintDto.getStartDate();
         LocalDate endDate = sprintDto.getEndDate();
         LocalDate today = LocalDate.now();
 
         if (startDate == null || endDate == null) {
-            return "Start date and end date must be provided.";
+            return "Start date and end date must be provided";
         }
 
         if (endDate.isBefore(startDate)) {
-            return "End date must be after start date.";
+            return "End date must be after start date";
         }
 
         if (startDate.isBefore(today)) {
-            return "Start date must be today or in the future.";
+            return "Start date must be today or in the future";
         }
 
         return null;

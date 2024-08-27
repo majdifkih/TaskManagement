@@ -13,16 +13,16 @@ import com.project.taskmanagement.payload.response.MessageResponse;
 import com.project.taskmanagement.repository.Auth.UserRepository;
 import com.project.taskmanagement.repository.Sprint.SprintRepository;
 import com.project.taskmanagement.repository.Task.TaskRepository;
+import com.project.taskmanagement.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -169,13 +169,13 @@ public class TaskServiceImp implements TaskService {
                     .body(new MessageResponse("User not found"));
         }
 
-        Set<User> users = task.getUsers();  // Utiliser les utilisateurs déjà associés à la tâche
+        Set<User> users = task.getUsers();
 
         if (users.contains(user)) {
             return ResponseEntity.ok(new MessageResponse("User already assigned!"));
         }
 
-        users.add(user);  // Ajouter l'utilisateur à la tâche
+        users.add(user);
         task.setUsers(users);
         taskRepository.save(task);
 
@@ -285,5 +285,42 @@ public class TaskServiceImp implements TaskService {
                 throw new RuntimeException("Task not found with ID: " + taskId);
             }
         }
+        @Override
+    public List<TaskDto> getTasksByUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Long userId = userDetails.getId();
+        List<Task> tasks = taskRepository.findByUsers_Id(userId);
+        return taskMapper.toDtoList(tasks);
+    }
+    @Override
+    public String getProjectNameOfTask(Long taskId) {
+        return taskRepository.findProjectNameByTaskId(taskId);
+    }
+    @Override
+    public Map<String, Long> getTaskCountsByStatusForUser() {
+        // Récupérer l'utilisateur authentifié
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Long userId = userDetails.getId();
+
+        // Exécuter la requête pour obtenir les comptes de tâches par statut
+        List<Object[]> results = taskRepository.countTasksByStatusForUser(userId);
+
+        // Log des résultats pour vérifier ce qui est retourné
+        System.out.println("Résultats de la requête pour userId=" + userId + " : " + results);
+
+        // Initialiser la map pour stocker les résultats
+        Map<String, Long> taskCounts = new HashMap<>();
+
+        // Parcourir les résultats et les insérer dans la map
+        for (Object[] result : results) {
+            String status = (String) result[0];
+            Long count = (Long) result[1];
+            taskCounts.put(status, count);
+        }
+
+        return taskCounts;
+    }
 
 }

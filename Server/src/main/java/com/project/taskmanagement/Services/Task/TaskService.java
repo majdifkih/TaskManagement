@@ -6,6 +6,7 @@ import com.project.taskmanagement.payload.response.MessageResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TaskService {
     ResponseEntity<MessageResponse> addTask(TaskDto taskDto);
@@ -18,4 +19,7 @@ public interface TaskService {
     ResponseEntity<MessageResponse> unassignUserFromTask(Long taskId, Long userId);
     ResponseEntity<MessageResponse> updateStatusAndOrder(Long taskId, TaskDto taskDto);
     List<ProfilDto> getUsersByTaskId(Long taskId);
+    List<TaskDto> getTasksByUserId();
+    String getProjectNameOfTask(Long taskId);
+    Map<String, Long> getTaskCountsByStatusForUser();
 }

@@ -38,7 +38,7 @@ public class ProjectServiceImp implements ProjectService {
 
         String projectNameUpper = projectDto.getProjectName().toUpperCase();
         if (projectRepository.existsByProjectNameAndAdminId(projectDto.getProjectName(), userId)) {
-            return ResponseEntity.badRequest().body(new MessageResponse("ProjectName already exists for this user"));
+            return ResponseEntity.badRequest().body(new MessageResponse("ProjectName already exists"));
         }
 
         Optional<User> existingUser = userRepository.findById(userId);
@@ -72,8 +72,9 @@ public class ProjectServiceImp implements ProjectService {
         String projectNameUpper = projectDto.getProjectName() != null ? projectDto.getProjectName().toUpperCase() : null;
 
         if (projectNameUpper != null && !project.getProjectName().equals(projectNameUpper)) {
-            if (projectRepository.existsByProjectNameAndAdminIdAndProjectId(projectNameUpper, userId, id)) {
-                return ResponseEntity.badRequest().body(new MessageResponse("ProjectName already exists for this user"));
+            // Vérifier si un autre projet avec le même nom existe déjà pour l'utilisateur
+            if (projectRepository.existsByProjectNameIgnoreCaseAndAdminIdAndProjectIdNot(projectNameUpper, userId, id)) {
+                return ResponseEntity.badRequest().body(new MessageResponse("ProjectName already exists"));
             }
             project.setProjectName(projectNameUpper);
         }

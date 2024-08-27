@@ -5,10 +5,12 @@ import com.project.taskmanagement.payload.request.ProfilDto;
 import com.project.taskmanagement.payload.request.TaskDto;
 import com.project.taskmanagement.payload.response.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user/tasks")
@@ -67,4 +69,17 @@ public class TaskController {
     public List<ProfilDto> getUsersByTaskId(@PathVariable Long taskId) {
         return taskService.getUsersByTaskId(taskId);
     }
+    @GetMapping("/mytasks")
+    public List<TaskDto> getTasksByUserId() {
+        return taskService.getTasksByUserId();
+    }
+    @GetMapping("/projectnameoftask")
+    public String getProjectNameOfTask(@RequestParam("taskId") Long taskId) {
+        return taskService.getProjectNameOfTask(taskId);
+    }
+    @GetMapping("/taskscount")
+    public Map<String,Long> getTaskCountsByStatus() {
+        return taskService.getTaskCountsByStatusForUser();
+    }
+
 }
