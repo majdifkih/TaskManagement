@@ -127,3 +127,7 @@
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
+
+  .text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Ajustez les valeurs selon vos besoins */
+  }

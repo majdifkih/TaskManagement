@@ -51,12 +51,11 @@ export class MyTasksComponent implements OnInit  {
       this.sprintId = id !== null ? +id : 0;
       
       this.EditTaskForm = this.fb.group({
-        taskName: [''],
+        taskName: ['', [Validators.required]],
         taskDescription: [''],
         startDate: [''],
         endDate: ['']
       }); 
-  
       this.addCommentForm = this.fb.group({
         content: [''],
       }); 
@@ -188,9 +187,11 @@ export class MyTasksComponent implements OnInit  {
       });
     }
     
-  
+    get f2() { return this.EditTaskForm.controls; }
+    
     //update sprint function
     updateTask(id: number) {
+      this.EditTaskForm.markAllAsTouched();
       if (this.EditTaskForm.valid) {
           console.log("Form values before sending:", this.EditTaskForm.value);
           // Correction de l'URL en utilisant l'ID du sprint
@@ -201,13 +202,13 @@ export class MyTasksComponent implements OnInit  {
                  this.closeModalEdit();
               },
               error: (error) => {
+                if(error.message="End date must be after start date."){
+                  this._toastr.error('End date must be after start date.', 'Error');}else{
                   console.error('Error updating task:', error);
                   this._toastr.error('Error updating task', 'Error');
+                  }
               }
           });
-      } else {
-          console.error('Task form is invalid');
-          this._toastr.error('Please fill out all required fields', 'Error');
       }
   }
   

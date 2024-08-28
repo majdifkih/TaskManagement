@@ -1,71 +1,100 @@
-
 <div class="parent"> 
-   
     <div class="container" [ngClass]="isSignDivVisiable ? 'active' :'' " id="container">
-        <div class="form-container sign-up" >
-            <form [formGroup]="signupForm">
-                <h1>Create Account</h1>
-                
-                <span></span>
-                <input type="text" formControlName="username" name="username" placeholder="UserName">
+      <!-- Formulaire d'inscription -->
+      <div class="form-container sign-up">
+        <form [formGroup]="signupForm">
+          <h1 class="text-2xl text-gray-700 dark:text-white text-center mt-5 mb-3" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">Create Account</h1>
 
-                <div *ngIf="f['username'].touched && f['username'].invalid" class="alert">
-                <div *ngIf="f['username'].errors && f['username'].errors['required']">UserName is required.</div>
-                </div>
-                                   
-                                   
-                <input type="email" formControlName="email" name="email" placeholder="Email">
-                <div *ngIf="f['email'].touched && f['email'].invalid" class="alert">
-                    <div *ngIf="f['email'].errors && f['email'].errors['required']">Email is required.</div>
-                    </div>
-                <input type="password" formControlName="password" name="password"  placeholder="Password">
-                <div *ngIf="f['password'].touched && f['password'].invalid" class="alert">
-                    <div *ngIf="f['password'].errors && f['password'].errors['required']">Password is required.</div>
-                    </div>
-                <select name="role" placeholder="Role" formControlName="role">
-                    <option value="" disabled selected>Select your role</option>
-                    <option value="ROLE_ADMIN">Project Manager</option>
-                    <option value="ROLE_EMPLOYEE">Employee</option>
-                  </select>
-                  <div *ngIf="f['role'].touched && f['role'].invalid" class="alert">
-                    <div *ngIf="f['role'].errors && f['role'].errors['required']">Role is required.</div>
-                    </div>
-                  
-                <button (click)="onRegister()">Sign Up</button>
-            </form>
-        </div>
-        <div class="form-container sign-in" >
-            <form [formGroup]="signinForm">
-                <h1>Sign In</h1>
-               
-                <span></span>
-                <input type="text" formControlName="username" name="username" placeholder="UserName">
+          <input type="text" formControlName="username" name="username" placeholder="UserName" class="bg-gray-200 mb-3 border border-gray-300 text-gray-500 text-sm rounded-lg shadow-sm  block w-full p-3 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-400"/>
+          <div *ngIf="f['username'].touched && f['username'].invalid" class="text-red-600 text-sm text-shadow">
+            <div *ngIf="f['username'].errors?.['required']">UserName is required.</div>
+          </div>
+          
+          <input type="email" formControlName="email" name="email" placeholder="Email" class="bg-gray-200 mb-3 border border-gray-300 text-gray-500 text-sm rounded-lg shadow-sm  block w-full p-3 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-400"/>
+          <div *ngIf="f['email'].touched && f['email'].invalid" class="text-red-600 text-sm mt-1 text-shadow">
+            <div *ngIf="f['email'].errors?.['required']">Email is required.</div>
+          </div>
+          <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
-                <div *ngIf="f2['username'].touched && f2['username'].invalid" class="alert">
-                <div *ngIf="f2['username'].errors && f2['username'].errors['required']">UserName is required.</div>
-                </div>
-
-                <input type="password" formControlName="password" name="password"  placeholder="Password">
-                <div *ngIf="f2['password'].touched && f2['password'].invalid" class="alert">
-                    <div *ngIf="f2['password'].errors && f2['password'].errors['required']">Password is required.</div>
-                    </div>
-                
-                <button (click)="onLogin()">Sign In</button>
-            </form>
+          <div class="input-wrapper">
+            <input 
+              [type]="showPassword ? 'text' : 'password'" 
+              formControlName="password" 
+              placeholder="Password"
+              class="bg-gray-200 mb-3 border border-gray-300 text-gray-500 text-sm rounded-lg shadow-sm  block p-3 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-400"
+            />
+            <span 
+              class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" 
+              (click)="togglePasswordVisibility()"
+            >
+              <i class="material-icons text-gray-600 mb-3">{{ showPassword ? 'visibility_off' : 'visibility' }}</i>
+            </span>
+          </div>
+          
+          <div *ngIf="f['password'].touched && f['password'].invalid" class="text-red-600 text-sm mt-1 text-shadow">
+            <div *ngIf="f['password'].errors?.['required']">Password is required.</div>
+          </div>
+      
+          <select name="role" placeholder="Role" formControlName="role" class="bg-gray-200 mb-3 border border-gray-300 text-gray-500 text-sm rounded-lg shadow-sm  block w-full p-3 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-400">
+            <option value="" disabled>Select your role</option>
+            <option value="ROLE_ADMIN">Project Manager</option>
+            <option value="ROLE_EMPLOYEE">Employee</option>
+          </select>
+          <div *ngIf="f['role'].touched && f['role'].invalid" class="text-red-600 text-sm mt-1 text-shadow">
+            <div *ngIf="f['role'].errors?.['required']">Role is required.</div>
+          </div>
+          
+          <button type="button" (click)="onRegister()" class="border mb-3 border-transparent bg-gradient-to-r from-cyan-800 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 ">Sign Up</button>
+        </form>
+      </div>
+      
+      <!-- Formulaire de connexion -->
+      <div class="form-container sign-in">
+        <form [formGroup]="signinForm">
+          <h1 class="text-2xl text-gray-700 dark:text-white text-center mb-3" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">Sign In</h1>
+          <input type="text" formControlName="username" name="username" placeholder="UserName" class="bg-gray-200 mb-3 border border-gray-300 text-gray-500 text-sm rounded-lg shadow-sm  block w-full p-3 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-400">
+          <div *ngIf="f2['username'].touched && f2['username'].invalid" class="text-red-600 text-sm mt-1 text-shadow">
+            <div *ngIf="f2['username'].errors && f2['username'].errors['required']">UserName is required.</div>
+          </div>
+          
+          <div class="input-wrapper">
+            <input 
+              [type]="showSigninPassword ? 'text' : 'password'" 
+              formControlName="password" 
+              name="password" 
+              placeholder="Password"
+              class="bg-gray-200 mb-3 border border-gray-300 text-gray-500 text-sm rounded-lg shadow-sm  block w-full p-3 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-400"
+            />
+            <span 
+              class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" 
+              (click)="toggleSigninPasswordVisibility()"
+            >
+              <i class="material-icons text-gray-600 mb-3">{{ showSigninPassword ? 'visibility_off' : 'visibility' }}</i>
+            </span>
+          </div>
+          <div *ngIf="f2['password'].touched && f2['password'].invalid" class="text-red-600 text-sm mt-1 text-shadow">
+            <div *ngIf="f2['password'].errors && f2['password'].errors['required']">Password is required.</div>
+          </div>
+          
+          <button type="button" (click)="onLogin()" class="mb-3 border border-transparent bg-gradient-to-r from-cyan-800 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 ">Sign In</button>
+        </form>
+      </div>
+  
+      <!-- Conteneur de bascule -->
+      <div class="toggle-container">
+        <div class="toggle">
+          <div class="toggle-panel toggle-left">
+            <h1>Welcome Back!</h1>
+            <p>Enter your personal details to use all of site features</p>
+            <button type="button" class="btnLog" id="login" (click)="isSignDivVisiable = false">Sign In</button>
+          </div>
+          <div class="toggle-panel toggle-right">
+            <h1>Welcome</h1>
+            <p>Register with your personal details to use all of site features</p>
+            <button type="button" class="btnLog" id="register" (click)="isSignDivVisiable = true">Sign Up</button>
+          </div>
         </div>
-        <div class="toggle-container">
-            <div class="toggle">
-                <div class="toggle-panel toggle-left">
-                    <h1>Welcome Back!</h1>
-                    <p>Enter your personal details to use all of site features</p>
-                    <button type="button" class="btnLog" id="login" (click)="isSignDivVisiable = false">Sign In</button>
-                </div>
-                <div class="toggle-panel toggle-right">
-                    <h1>Welcome</h1>
-                    <p>Register with your personal details to use all of site features</p>
-                    <button type="button" class="btnLog" id="register" (click)="isSignDivVisiable = true">Sign Up</button>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
-</div>
+  </div>
+  

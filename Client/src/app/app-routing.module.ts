@@ -9,11 +9,11 @@ import { ProfilComponent } from './pages/profil/profil.component';
 import { MyTasksComponent } from './pages/my-tasks/my-tasks.component';
 
 const routes: Routes = [
-  {
-    path:'',
-    redirectTo : 'login',
-    pathMatch:'full'
-  },
+  // {
+  //   path:'',
+  //   redirectTo : 'login',
+  //   pathMatch:'full'
+  // },
   {
     path:'login',
     component: LoginComponent

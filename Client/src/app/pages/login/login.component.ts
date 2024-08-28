@@ -15,7 +15,8 @@ export class LoginComponent implements OnInit{
   isSignDivVisiable: boolean  = true;
   signupForm!: FormGroup;
   signinForm!: FormGroup;
-
+  showPassword = false;
+  showSigninPassword = false;
   constructor(private authService:AuthService,private router:Router,private fb: FormBuilder,private _toastr: ToastrService){}
 
   ngOnInit(): void {
@@ -36,6 +37,7 @@ export class LoginComponent implements OnInit{
 
 
      onRegister() {
+      this.signupForm.markAllAsTouched();
       if (this.signupForm.valid) {
         this.authService.signup(this.signupForm.value).subscribe({
           next: (data: any) => {
@@ -43,22 +45,24 @@ export class LoginComponent implements OnInit{
             this.router.navigate(['/login']);
           },
           error: (error) => {
-            if (error.status === 400) {
+            if (error.meassge='Error: Username is already taken!') {
               this._toastr.error('User already exists', 'Error');
                 console.error(error);
+            }else if (error.message='Error: Email is already in use!') {
+              this._toastr.error('Email already exists', 'Error');
+              console.error(error);
             }
               
           
           }
         });
-      } else {
-        this._toastr.error("Please fill out all fields correctly.");
       }
     }
     
   
   
 onLogin() {
+  this.signinForm.markAllAsTouched();
   if(this.signinForm.valid) {
     console.log(this.signinForm.value);
     this.authService.login(this.signinForm.value).subscribe({
@@ -70,10 +74,17 @@ onLogin() {
         console.log(error);
       }
     })
-  }else {
-    this._toastr.error("Please fill out all fields correctly.");
   }
 }
 
+
+
+togglePasswordVisibility(): void {
+  this.showPassword = !this.showPassword;
+}
+
+toggleSigninPasswordVisibility(): void {
+  this.showSigninPassword = !this.showSigninPassword;
+}
 
 }

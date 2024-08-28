@@ -354,8 +354,12 @@
             <div class="mt-10 space-y-4">
                 <div>
                     <label for="taskname" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-cyan-400">Task Name</label>
-                    <input type="text" formControlName="taskName" name="taskName" id="taskname" class="bg-gray-50 border border-cyan-300 text-gray-900 text-sm rounded-lg shadow-md focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-700 dark:border-cyan-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-cyan-500 dark:focus:border-cyan-500" placeholder="Enter Task Name" />
-                </div>
+                    <input type="text" formControlName="taskName" name="taskName" id="taskname" class="bg-gray-50 border border-cyan-300 text-gray-900 text-sm rounded-lg shadow-md focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-700 dark:border-cyan-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-cyan-500 dark:focus:border-cyan-500" placeholder="Enter Task Name" required/>
+                    <div *ngIf="f2['taskName'].touched && f2['taskName'].invalid" class="text-red-600 text-sm mt-1 text-shadow">
+                      <div *ngIf="f2['taskName'].errors && f2['taskName'].errors['required']">Task Name is required.</div>
+                     
+                    </div>
+                  </div>
                 <div>
                     <label for="description" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-cyan-400">Description</label>
                     <textarea id="description" formControlName="taskDescription" name="taskDescription" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-cyan-300 shadow-md focus:ring-cyan-500 focus:border-cyan-500 dark:bg-gray-700 dark:border-cyan-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-cyan-500 dark:focus:border-cyan-500" placeholder="Write task description..."></textarea>

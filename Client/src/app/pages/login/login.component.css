@@ -1,8 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 
 *{
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
 }
@@ -36,16 +34,7 @@
     margin: 20px 0;
 }
 
-.container span{
-    font-size: 12px;
-}
 
-.container a{
-    color: #333;
-    font-size: 13px;
-    text-decoration: none;
-    margin: 15px 0 10px;
-}
 
 .container button{
     background-color: #512da8;
@@ -76,27 +65,7 @@
     height: 100%;
 }
 
-.container input{
-    background-color: #eee;
-    border: none;
-    margin: 8px 0;
-    padding: 10px 15px;
-    font-size: 13px;
-    border-radius: 8px;
-    width: 100%;
-    outline: none;
-}
-.container select{
-    background-color: #eee;
-    color: #333;
-    border: none;
-    margin: 8px 0;
-    padding: 10px 15px;
-    font-size: 13px;
-    border-radius: 8px;
-    width: 100%;
-    outline: none;
-}
+
 .form-container{
     position: absolute;
     top: 0;
@@ -159,9 +128,9 @@
 }
 
 .toggle{
-    background-color: #512da8;
+    background-color:linear-gradient(to right, #0f4c92, #1e90ff);
     height: 100%;
-    background: linear-gradient(to right, #5c6bc0, #512da8);
+    background: linear-gradient(to right, #0f4c92, #1e90ff);
     color: #fff;
     position: relative;
     left: -100%;
@@ -207,9 +176,17 @@
     transform: translateX(200%);
 }
 
-.alert{
-    color:red;
-    font-size: x-small;
-   
 
-}
+.text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Ajustez les valeurs selon vos besoins */
+  }
+
+  .input-wrapper {
+    position: relative;
+    width: 100%;
+  }
+  
+  .input-wrapper input {
+    width: 100%;
+  }
+  

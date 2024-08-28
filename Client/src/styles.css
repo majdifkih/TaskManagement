@@ -12,9 +12,55 @@ body{
     padding: 0;
     font-family:Arial, Helvetica, sans-serif
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Personnalisation des alertes ngx-toastr */
 .toast-top-center {
-    margin-top: 90px !important; 
-  }
+  margin-top: 50px !important; /* Ajuster l'espacement par rapport au haut */
+}
+
+.toast-success {
+  background: linear-gradient(to right, #76ee92, #53dd73, #74e48e) !important; /* Dégradé de couleur */
+  width: 30% !important; 
+  color: #fff !important; /* Texte en blanc pour contraster avec l'arrière-plan */
+  border: 1px solid #b9b8b8 !important;
+  border-radius: 5px !important;}
+
+.toast-error {
+  background: linear-gradient(to right, #f87171, #ef4444, #dd5353) !important; /* Dégradé de couleur */
+  width: 30% !important; 
+  color: #fff !important; /* Texte en blanc pour contraster avec l'arrière-plan */
+  border: 0.1px solid #b9b8b8 !important;
+  border-radius: 5px !important;
+}
+.toast-error .toast-icon {
+  color: #fff !important; /* Assurez-vous que l'icône est blanche */
+  width: 20px !important; /* Taille de l'icône */
+  height: 20px !important; /* Taille de l'icône */
+}
+
 
   @tailwind base;
 @tailwind components;

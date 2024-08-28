@@ -287,10 +287,7 @@ GetUserName(){
                 this._toastr.error('Error updating task', 'Error');
                 }}
         });
-    } else {
-        console.error('Task form is invalid');
-        this._toastr.error('Please fill out all required fields', 'Error');
-    }
+    } 
 }
 
   
