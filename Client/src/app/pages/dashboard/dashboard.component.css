@@ -3,6 +3,7 @@
   flex-direction: column;
   height: 100vh;
 }
+
 .dash-header-container {
   width: 100%; /* Utilise la largeur complète */
   z-index: 10; /* Assure que le header reste au-dessus des autres contenus */
@@ -12,28 +13,35 @@
   width: 100%;
 }
 
-
 .main-content {
   flex: 1;
   overflow-x: hidden; 
-}
-
-
-.dash-main-content {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  margin-top: 2%;
-}
-
-
-
-
-.main-content {
   padding: 1rem;
 }
 
+.text-shadow {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Ajustez les valeurs selon vos besoins */
+}
 
+.dash-main-content .flex.gap-12 {
+  gap: 24px; /* Augmenter l'espace entre les cartes */
+}
 
-
-
+.recent-projects-title::after {
+  content: '';
+  display: block;
+  border-bottom: 1px solid #c4c5c6; /* Utilisez la couleur désirée pour la ligne */
+  width: 90%;
+  margin-top: 10px; /* Ajustez l'espace au-dessus de la ligne si nécessaire */
+  margin-left: 5%;
+}
+.tasknbr{
+  border: 1px solid #c4c5c6;
+  border-radius: 5px;
+  padding: 3%;
+  width: 20%;
+  margin-top: 3%;
+  color: #FFFFFF;
+  text-align: center; 
+  background-color: #818b99;
+}

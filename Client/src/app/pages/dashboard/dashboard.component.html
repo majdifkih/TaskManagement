@@ -1,38 +1,91 @@
 <div class="dash-container">
-  
   <div class="dash-header border-b border-gray-300 dark:border-gray-700">
     <app-header></app-header>
   </div>
 
-  <div class="dash-main-content">
-
-    <div class="main-content">
+  <h1 class="text-4xl font-semibold text-gray-700 dark:text-white mt-5 ml-10" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">Dashboard</h1>
+  <div class="dash-main-content flex justify-center mt-8">
+    <div *ngIf="taskCounts$ | async as taskCounts" class="flex gap-28"> <!-- Augmenter l'espace entre les cartes -->
       
-      <h2>recent Projects</h2>
-      <div class="grid grid-cols-2 md:grid-cols-3  ml-20">
-        <div *ngFor="let project of projects" 
-             class="project-card w-60 h-55 p-4 cursor-pointer border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 
-                    hover:shadow-lg transition-shadow duration-300 transform hover:scale-105">
-         
-          <div [routerLink]="['/backlog', project.projectId]">
-
-            <div class="d-flex gap-2">
-              <svg class="w-8 h-8 text-gray-500 dark:text-gray-400 mb-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                <path fill-rule="evenodd" d="M8 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1h2a2 2 0 0 1 2 2v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2Zm6 1h-4v2H9a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2h-1V4Zm-3 8a1 1 0 0 1 1-1h3a1 1 0 1 1 0 2h-3a1 1 0 0 1-1-1Zm-2-1a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H9Zm2 5a1 1 0 0 1 1-1h3a1 1 0 1 1 0 2h-3a1 1 0 0 1-1-1Zm-2-1a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H9Z" clip-rule="evenodd" />
-              </svg>
-              <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-700 dark:text-white">{{ project.projectName }}</h5>
+      <!-- Carte To-Do -->
+      <div class="w-60 h-55 p-3 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" >
+        <div *ngIf="taskCounts['To-Do'] !== undefined">
+          <div class="flex gap-2 items-center justify-center mt-4">
+            <div class="flex items-center justify-center w-[40px] h-[40px] bg-red-300 rounded-full">
+              <i class="material-icons-outlined text-xl text-red-900 font-bold">list</i>
             </div>
-            <div class="d-flex gap-2 justify-end mr-2">
-              <svg class="w-6 h-6 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                <path fill-rule="evenodd" d="M5 5a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1 2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a2 2 0 0 1 2-2ZM3 19v-7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Zm6.01-6a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm-10 4a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z" clip-rule="evenodd"/>
-              </svg>
-              <p class="mb-3 font-normal text-gray-500 dark:text-gray-400">{{ project.creationDate | date:'dd/MM/yyyy' }}</p>
-            </div>
+          <h2 class="font-bold text-center text-xl text-shadow">To-Do Tasks</h2>
+         </div>
+         <div class="flex items-center justify-center  mt-3">
+            <h5 class="tasknbr text-2xl font-semibold tracking-tight text-gray-700 dark:text-white">
+              {{ taskCounts['To-Do'] || 0 }}
+            </h5>
           </div>
         </div>
       </div>
-    </div>
   
+      <!-- Carte Doing -->
+      <div class="w-60 h-55 p-3 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <div *ngIf="taskCounts['Doing'] !== undefined">
+          
+          <div class="flex gap-2 items-center justify-center mt-4">
+            <div class="flex items-center justify-center w-[40px] h-[40px] bg-orange-200 rounded-full">
+              <i class="material-icons-outlined text-2xl text-yellow-500">history_toggle_off</i>
+            </div>
+          <h2 class="font-bold text-center text-xl text-shadow">Doing Tasks</h2>
+         </div>
+         <div class="flex items-center justify-center  mt-3">
+            <h5 class="tasknbr text-2xl font-semibold tracking-tight text-gray-700 dark:text-white">
+              {{ taskCounts['Doing'] || 0 }}
+            </h5>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Carte Done -->
+      <div class="w-60 h-55 p-3 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <div *ngIf="taskCounts['Done'] !== undefined">
+         
+          <div class="flex gap-2 items-center justify-center mt-4">
+            <div class="flex items-center justify-center w-[40px] h-[40px] bg-green-200 rounded-full">
+              <i class="material-icons-outlined text-2xl text-green-700">task_alt</i>
+            </div>
+          <h2 class="font-bold text-center text-xl text-shadow">Done Tasks</h2>
+         </div>
+         <div class="flex items-center justify-center  mt-3">
+            <h5 class="tasknbr text-2xl font-semibold tracking-tight text-gray-700 dark:text-white">
+              {{ taskCounts['Done'] || 0 }}
+            </h5>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+
+  <!-- Section des projets récents -->
+  <h2 class="mt-20 text-xl font-semibold text-gray-700 dark:text-white ml-20">Recent Projects</h2> <!-- Ajouter la classe ici -->
+  <div class="recent-projects-title"></div>
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4 ml-20 mb-5">
+    <div *ngFor="let project of projects" 
+         class="project-card w-60 h-55 p-4 cursor-pointer border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 
+                hover:shadow-lg transition-shadow duration-300 transform hover:scale-105">
+      <div [routerLink]="['/backlog', project.projectId]">
+        <div class="flex gap-2">
+          <svg class="w-8 h-8 text-gray-500 dark:text-gray-400 mb-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+            <path fill-rule="evenodd" d="M8 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1h2a2 2 0 0 1 2 2v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2Zm6 1h-4v2H9a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2h-1V4Zm-3 8a1 1 0 0 1 1-1h3a1 1 0 1 1 0 2h-3a1 1 0 0 1-1-1Zm-2-1a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H9Zm2 5a1 1 0 0 1 1-1h3a1 1 0 1 1 0 2h-3a1 1 0 0 1-1-1Zm-2-1a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H9Z" clip-rule="evenodd" />
+          </svg>
+          <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-700 dark:text-white">{{ project.projectName }}</h5>
+        </div>
+        <div class="flex gap-2 justify-end mr-2">
+          <svg class="w-6 h-6 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+            <path fill-rule="evenodd" d="M5 5a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1 2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a2 2 0 0 1 2-2ZM3 19v-7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Zm6.01-6a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm-10 4a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z" clip-rule="evenodd"/>
+          </svg>
+          <p class="mb-3 font-normal text-gray-500 dark:text-gray-400">{{ project.creationDate | date:'dd/MM/yyyy' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="dash-footer mt-2">
     <app-footer></app-footer>

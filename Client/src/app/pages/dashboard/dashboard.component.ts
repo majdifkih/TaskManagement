@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ProjectService } from '../../services/projects/project-servcie.service';
 import { jwtDecode } from 'jwt-decode';
+import { TaskService } from '../../services/tasks/task.service';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,12 +12,33 @@ import { jwtDecode } from 'jwt-decode';
 export class DashboardComponent {
   projects: any[] = [];
   isAdmin: boolean = false;
-constructor(private projectService: ProjectService) {}
+  taskCounts$: Observable<any> | null = null;
+
+constructor(private projectService: ProjectService,private taskService:TaskService) {}
 
 ngOnInit(): void {
   
   this.loadProjects();
+  this.loadTaskCounts();
 }
+
+loadTaskCounts(): void {
+  this.taskService.getTaskCount().subscribe(data => {
+    console.log(data); // Vérifiez la structure des données reçues
+    // Assurez-vous que chaque statut a une valeur par défaut de 0 si absent
+    const taskCounts = {
+      'To-Do': data['To-Do'] || 0,
+      'Doing': data['Doing'] || 0,
+      'Done': data['Done'] || 0
+    };
+    this.taskCounts$ = of(taskCounts);
+  });
+}
+
+getKeys(obj: any): string[] {
+  return Object.keys(obj);
+}
+
 
 getUserId(){
   const accessToken = localStorage.getItem('accessToken'); 
@@ -89,5 +112,8 @@ getLastThreeProjects(projects: any[]): any[] {
     .sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime())
     .slice(0, 3);
 }
+
+
+
 
 }

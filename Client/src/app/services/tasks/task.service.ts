@@ -138,7 +138,7 @@ getTaskCount(): Observable<any> {
   let headers = this.httpOptions.headers;
   headers = this.addAuthorizationHeader(headers);
 
-  return this.http.get<any>(`${this.host}/taskcount`, { headers });
+  return this.http.get<any>(`${this.host}/taskscount`, { headers });
 }
 
 }
