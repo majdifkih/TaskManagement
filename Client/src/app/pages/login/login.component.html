@@ -5,12 +5,12 @@
         <form [formGroup]="signupForm">
           <h1 class="text-2xl text-gray-700 dark:text-white text-center mt-5 mb-3" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">Create Account</h1>
 
-          <input type="text" formControlName="username" name="username" placeholder="UserName" class="bg-gray-200 mb-3 border border-gray-300 text-gray-500 text-sm rounded-lg shadow-sm  block w-full p-3 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-400"/>
+          <input type="text" formControlName="username" name="username" placeholder="UserName" class="bg-gray-200 mb-3 border border-gray-300 text-gray-800 text-sm rounded-lg shadow-sm  block w-full p-3 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-400"/>
           <div *ngIf="f['username'].touched && f['username'].invalid" class="text-red-600 text-sm text-shadow">
             <div *ngIf="f['username'].errors?.['required']">UserName is required.</div>
           </div>
           
-          <input type="email" formControlName="email" name="email" placeholder="Email" class="bg-gray-200 mb-3 border border-gray-300 text-gray-500 text-sm rounded-lg shadow-sm  block w-full p-3 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-400"/>
+          <input type="email" formControlName="email" name="email" placeholder="Email" class="bg-gray-200 mb-3 border border-gray-300 text-gray-800 text-sm rounded-lg shadow-sm  block w-full p-3 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-400"/>
           <div *ngIf="f['email'].touched && f['email'].invalid" class="text-red-600 text-sm mt-1 text-shadow">
             <div *ngIf="f['email'].errors?.['required']">Email is required.</div>
           </div>
@@ -21,7 +21,7 @@
               [type]="showPassword ? 'text' : 'password'" 
               formControlName="password" 
               placeholder="Password"
-              class="bg-gray-200 mb-3 border border-gray-300 text-gray-500 text-sm rounded-lg shadow-sm  block p-3 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-400"
+              class="bg-gray-200 mb-3 border border-gray-300 text-gray-800 text-sm rounded-lg shadow-sm  block p-3 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-400"
             />
             <span 
               class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" 
@@ -35,8 +35,8 @@
             <div *ngIf="f['password'].errors?.['required']">Password is required.</div>
           </div>
       
-          <select name="role" placeholder="Role" formControlName="role" class="bg-gray-200 mb-3 border border-gray-300 text-gray-500 text-sm rounded-lg shadow-sm  block w-full p-3 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-400">
-            <option value="" disabled>Select your role</option>
+          <select name="role" placeholder="Role" formControlName="role" class="bg-gray-200 mb-3 border border-gray-300 text-gray-800 text-sm rounded-lg shadow-sm  block w-full p-3 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-400">
+            <option value="" disabled selected>Select your role</option>
             <option value="ROLE_ADMIN">Project Manager</option>
             <option value="ROLE_EMPLOYEE">Employee</option>
           </select>
@@ -52,7 +52,7 @@
       <div class="form-container sign-in">
         <form [formGroup]="signinForm">
           <h1 class="text-2xl text-gray-700 dark:text-white text-center mb-3" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">Sign In</h1>
-          <input type="text" formControlName="username" name="username" placeholder="UserName" class="bg-gray-200 mb-3 border border-gray-300 text-gray-500 text-sm rounded-lg shadow-sm  block w-full p-3 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-400">
+          <input type="text" formControlName="username" name="username" placeholder="UserName" class="bg-gray-200 mb-3 border border-gray-300 text-gray-800 text-sm rounded-lg shadow-sm  block w-full p-3 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-400">
           <div *ngIf="f2['username'].touched && f2['username'].invalid" class="text-red-600 text-sm mt-1 text-shadow">
             <div *ngIf="f2['username'].errors && f2['username'].errors['required']">UserName is required.</div>
           </div>
@@ -63,7 +63,7 @@
               formControlName="password" 
               name="password" 
               placeholder="Password"
-              class="bg-gray-200 mb-3 border border-gray-300 text-gray-500 text-sm rounded-lg shadow-sm  block w-full p-3 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-400"
+              class="bg-gray-200 mb-3 border border-gray-300 text-gray-800 text-sm rounded-lg shadow-sm  block w-full p-3 dark:bg-gray-600 dark:border-gray-500 dark:text-gray-400"
             />
             <span 
               class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" 

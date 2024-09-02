@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit{
         this.authService.signup(this.signupForm.value).subscribe({
           next: (data: any) => {
             this._toastr.success('User registered successfully', 'Success');
-            this.router.navigate(['/login']);
+            this.signupForm.reset();
           },
           error: (error) => {
             if (error.meassge='Error: Username is already taken!') {
