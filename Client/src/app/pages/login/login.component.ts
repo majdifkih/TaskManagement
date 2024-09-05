@@ -72,6 +72,7 @@ onLogin() {
       },
       error: (error) => {
         console.log(error);
+        this._toastr.error('Incorrect username or password. Please try again.', 'Authentication Error');
       }
     })
   }

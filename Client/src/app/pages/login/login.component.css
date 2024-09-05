@@ -190,3 +190,11 @@
     width: 100%;
   }
   
+  /* Masquer l'icône de visibilité par défaut dans les navigateurs qui l'affichent */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-webkit-search-clear-button,
+input[type="password"]::-webkit-search-decoration,
+input[type="password"]::-webkit-search-results-button,
+input[type="password"]::-webkit-search-results-decoration {
+  display: none;
+}
